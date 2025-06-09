@@ -3,16 +3,24 @@
   "version": "2.0.0",
   "description": "reformat of previous stockpiece backend with imporvements",
   "main": "server.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node ./dist/node.test.js",
     "lint": "eslint ./src",
     "lint:fix": "eslint ./src --fix",
     "format": "prettier ./src --write",
     "format:check": "prettier ./src --check",
-    "prepare": "husky"
+    "prepare": "husky",
+    "build": "tsc",
+    "dev": "NODE_ENV=development nodemon -r source-map-support/register --delay 10 ./dist/server.js",
+    "start": "NODE_ENV=production node ./dist/server.js",
+    "build_dev": "npm run build && npm run dev"
   },
   "lint-staged": {
-    "./src/**/*": "prettier --write --ignore-unknown"
+    "./src/**/*": [
+      "prettier --write --ignore-unknown",
+      "eslint --fix"
+    ]
   },
   "repository": {
     "type": "git",
@@ -33,8 +41,11 @@
   "dependencies": {
     "cors": "^2.8.5",
     "debug": "^4.4.1",
+    "dotenv": "^16.5.0",
     "express": "^5.1.0",
-    "jsonwebtoken": "^9.0.2"
+    "jsonwebtoken": "^9.0.2",
+    "winston": "^3.17.0",
+    "winston-mongodb": "^6.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.27.0",
@@ -46,6 +57,7 @@
     "globals": "^16.1.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.0.0",
+    "nodemon": "^3.1.10",
     "prettier": "3.5.3",
     "source-map-support": "^0.5.21",
     "typescript": "^5.8.3",
