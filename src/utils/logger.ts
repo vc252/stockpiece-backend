@@ -1,38 +1,77 @@
 import winston from "winston";
-// import { MongoDB } from "winston-mongodb"
+import { MongoDBConnectionOptions, MongoDB } from "winston-mongodb";
+import mongoose from "mongoose";
+import { collections } from "../common/constants.common.js";
 
-const logger: winston.Logger = winston.createLogger({
-  levels: winston.config.syslog.levels,
-  level: process.env.LOG_LEVEL || "info",
-  transports: [
+declare module "winston" {
+  interface Logger {
+    critic: winston.LeveledLogMethod;
+    notice: winston.LeveledLogMethod;
+  }
+}
+
+const customLevels = {
+  levels: {
+    critic: 0,
+    error: 1,
+    notice: 2,
+    info: 3,
+    debug: 4,
+    verbose: 5,
+  },
+  colors: {
+    critic: "redBG",
+    error: "red",
+    notice: "cyan",
+    info: "green",
+    debug: "gray",
+    verbose: "yellowBright",
+  },
+};
+
+const logLevel =
+  process.env.LOG_LEVEL || process.env.NODE_ENV === "production"
+    ? "notice"
+    : "verbose";
+
+const logger = winston.createLogger({
+  levels: customLevels.levels,
+});
+
+addConsoleTransport(logger);
+
+function addConsoleTransport(logger: winston.Logger) {
+  logger.add(
     new winston.transports.Console({
-      level: "info",
+      level: logLevel,
       format: winston.format.combine(
         winston.format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
-        winston.format.cli(),
+        winston.format.colorize({ colors: customLevels.colors }),
         winston.format.printf(({ timestamp, level, message }) => {
           return `[${timestamp}] ${level} ${message}`;
         })
       ),
-    }),
-  ],
-});
+    })
+  );
+}
 
-export default logger;
+function addMongoTransport(
+  logger: winston.Logger,
+  mongoClient: mongoose.mongo.MongoClient
+) {
+  const transportOptions: MongoDBConnectionOptions = {
+    db: Promise.resolve(mongoClient),
+    collection: collections.LOG_ERRORS,
+    level: "error",
+  };
 
-//production i want errors and start code
-//on devlopment i want errors code and start code plus the code info code
-//I think i should use a single logger plus debug logger for inside logs
-//it would be more uniform
+  const mongoTransport = new MongoDB(transportOptions);
 
-//why can't we just make the normal logs as console
-//but i think we won't have anywhere to tranport them that is the issue
-//but i only need the error logs to be displayed in the telegram
-//the info logs can be displayed as usual
+  mongoTransport.on("error", (error) => {
+    logger.error(`MongoDB Transport error: ${error}`);
+  });
 
-//the internal server error should be error and rest should be warning
-//the ciritcal is for special purposes
+  logger.add(mongoTransport);
+}
 
-//or i can use the syslogs
-//with notice being the start of the server and all
-//
+export { logger, logLevel, addMongoTransport };

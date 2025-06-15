@@ -14,7 +14,8 @@
     "build": "tsc",
     "dev": "NODE_ENV=development nodemon -r source-map-support/register --delay 10 ./dist/server.js",
     "start": "NODE_ENV=production node ./dist/server.js",
-    "build_dev": "npm run build && npm run dev"
+    "build_dev": "npm run build && npm run dev",
+    "lint_build_dev": "npm run lint && npm run build_dev"
   },
   "lint-staged": {
     "./src/**/*": [
@@ -44,6 +45,7 @@
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.15.1",
     "winston": "^3.17.0",
     "winston-mongodb": "^6.0.0"
   },

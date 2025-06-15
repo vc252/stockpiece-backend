@@ -1,4 +1,4 @@
-import { HttpError } from "./HttpErrors.js";
+import { HttpError } from "./HttpResponse.js";
 
 export class ApiError extends Error {
   public readonly success = false;

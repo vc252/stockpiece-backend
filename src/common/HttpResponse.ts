@@ -56,4 +56,23 @@ const HttpError = {
   },
 } as const;
 
-export { HttpError };
+const HttpSuccess = {
+  OK: {
+    statusCode: 200,
+    message: "Request succeeded",
+  },
+  CREATED: {
+    statusCode: 201,
+    message: "Resource successfully created",
+  },
+  ACCEPTED: {
+    statusCode: 202,
+    message: "Request accepted for processing",
+  },
+  NO_CONTENT: {
+    statusCode: 204,
+    message: "No content to return",
+  },
+} as const;
+
+export { HttpError, HttpSuccess };

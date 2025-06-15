@@ -1,5 +1,6 @@
 import CommonRoutesConfig from "../config/common.routes.config.js";
 import express from "express";
+import { logger } from "../utils/logger.js";
 
 export default function registerRoutes(
   app: express.Application,
@@ -19,7 +20,7 @@ export default function registerRoutes(
     routerInstance.configurRoutes();
     app.use(`${basePrefix}${routeDef.basePath}`, routerInstance.router);
 
-    console.log(
+    logger.notice(
       `registered route:${routeDef.name} on basePath:${routeDef.basePath}`
     );
   });
