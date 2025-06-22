@@ -15,7 +15,7 @@ export default class UserService {
   ): Promise<UserResponse> => {
     const createdUser: UserResponse =
       await this.userRepository.createUser(user);
-    logger.info(`user created: `, createdUser);
+    logger.info(`user created:`, createdUser);
     return createdUser;
   };
 }

@@ -48,8 +48,12 @@ function addConsoleTransport(logger: winston.Logger) {
         winston.format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
         winston.format.prettyPrint(),
         winston.format.colorize({ colors: customLevels.colors }),
-        winston.format.printf(({ timestamp, level, message }) => {
-          return `[${timestamp}] ${level} ${message}`;
+        winston.format.printf(({ timestamp, level, message, ...metadata }) => {
+          const metaString = Object.keys(metadata).length
+            ? JSON.stringify(metadata, null, 2)
+            : "";
+          //if metaString or message is not there then we don't need a space
+          return `[${timestamp}] ${level}${message ? ` ${message}` : ""}${metaString ? ` ${metaString}` : ""}`;
         })
       ),
     })
