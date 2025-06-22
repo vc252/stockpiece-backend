@@ -4,6 +4,11 @@ const HttpError = {
     error: "BadRequest",
     message: "The request is invalid or malformed",
   },
+  VALIDATION_ERROR: {
+    statusCode: 400,
+    error: "ValidationError",
+    message: "Invalid request body",
+  },
   UNAUTHORIZED: {
     statusCode: 401,
     error: "Unauthorized",
@@ -64,6 +69,10 @@ const HttpSuccess = {
   CREATED: {
     statusCode: 201,
     message: "Resource successfully created",
+  },
+  USER_REGISTERED: {
+    statusCode: 201,
+    message: "User Registered Successfully",
   },
   ACCEPTED: {
     statusCode: 202,

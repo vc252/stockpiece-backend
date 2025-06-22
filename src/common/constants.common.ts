@@ -11,4 +11,13 @@ const collections = {
   LOG_ERRORS: "log",
 } as const;
 
-export { __filename, __dirname, rootdir, DB_NAME, collections };
+const defaultAvatarUrl = "";
+
+export {
+  __filename,
+  __dirname,
+  rootdir,
+  DB_NAME,
+  collections,
+  defaultAvatarUrl,
+};

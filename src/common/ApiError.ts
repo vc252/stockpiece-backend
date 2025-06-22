@@ -6,13 +6,13 @@ export class ApiError extends Error {
   constructor(
     public readonly statusCode: number = HttpError.INTERNAL_SERVER_ERROR
       .statusCode,
+    public readonly name: string = HttpError.INTERNAL_SERVER_ERROR.error,
     public readonly message: string = HttpError.INTERNAL_SERVER_ERROR.message,
-    public stack = "",
-    public readonly rawError: object
+    public readonly rawError?: object
   ) {
     super(message);
 
-    if (!stack) {
+    if (!this.stack) {
       Error.captureStackTrace(this, this.constructor);
     }
   }

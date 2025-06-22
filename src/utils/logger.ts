@@ -25,7 +25,7 @@ const customLevels = {
     notice: "cyan",
     info: "green",
     debug: "gray",
-    verbose: "yellowBright",
+    verbose: "yellowBG",
   },
 };
 
@@ -46,6 +46,7 @@ function addConsoleTransport(logger: winston.Logger) {
       level: logLevel,
       format: winston.format.combine(
         winston.format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
+        winston.format.prettyPrint(),
         winston.format.colorize({ colors: customLevels.colors }),
         winston.format.printf(({ timestamp, level, message }) => {
           return `[${timestamp}] ${level} ${message}`;
