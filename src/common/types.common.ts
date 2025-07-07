@@ -12,7 +12,7 @@ type Controller = (
   req: Request,
   res: Response,
   next: NextFunction
-) => void | Promise<void>;
+) => Promise<void>;
 
 type UserRepositoryType = typeof UserRepository;
 
@@ -28,6 +28,11 @@ type RouterDefType = {
   ) => CommonRoutesConfig;
   routerOptions: keyValueObject;
 }[];
+
+type AuthResponse = {
+  accessToken: string;
+  refreshToken: string;
+};
 
 interface RouterOptions {
   name: string;
@@ -48,4 +53,5 @@ export {
   RouterOptions,
   RouterDefType,
   Constructor,
+  AuthResponse,
 };

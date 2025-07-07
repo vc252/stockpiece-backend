@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import * as argon from "argon2";
 import { User } from "../schemas/User.schema.js";
+import * as argon from "argon2";
 
 const userSchema = new mongoose.Schema<User>(
   {
@@ -17,8 +17,6 @@ const userSchema = new mongoose.Schema<User>(
       type: String,
       required: true,
       trim: true,
-      minLength: [1, "minimum 1 character required"],
-      maxLength: [30, "maximum 30 characters allowed"],
     },
     email: {
       type: String,
@@ -29,6 +27,26 @@ const userSchema = new mongoose.Schema<User>(
         /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
         "Please enter a valid email address",
       ],
+    },
+    refreshToken: {
+      type: String,
+      default: "",
+    },
+    hasUsedReferral: {
+      type: Boolean,
+      default: false,
+    },
+    lastLogin: {
+      type: Date,
+      default: null,
+    },
+    avatar: {
+      type: String,
+      default: null,
+    },
+    accountValue: {
+      type: Number,
+      default: 0,
     },
   },
   { timestamps: true }

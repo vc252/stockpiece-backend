@@ -10,6 +10,10 @@ let app: express.Application = express();
 
 app.use(express.json());
 app.use(cors());
+//gives the original client ip instead of proxy
+//we need to do this because if we see the proxy ip then the req might be interpreted as http
+//which might create problems with secure cookies
+app.set("trust proxy", true);
 
 const container = Container.getInstance();
 registerComponents(container, ComponenetsDef);

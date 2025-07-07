@@ -5,17 +5,18 @@ import dotenv from "dotenv";
 import connectDB from "./config/db.config.js";
 import { addMongoTransport, logger } from "./utils/logger.js";
 import mongoose from "mongoose";
+import env from "./config/env.config.js";
 
 loadEnvironment();
 await connectDB();
 
-if (process.env.NODE_ENV === "production") {
+if (env.NODE_ENV === "production") {
   addMongoTransport(logger, mongoose.connection.getClient());
 }
 
 const server: http.Server = http.createServer(app);
-const port = process.env.PORT || 3001;
-const host = process.env.HOST || "localhost";
+const port = env.PORT;
+const host = env.HOST;
 
 server.listen(port, () => {
   logger.notice(
@@ -29,6 +30,7 @@ process.on("SIGTERM", shutdown);
 function shutdown(): void {
   logger.notice("Received shutdown signal");
   server.close(() => {
+    mongoose.connection.close();
     logger.notice("server closed successfully");
     process.exit(0);
   });
@@ -53,7 +55,7 @@ function loadEnvironment(): void {
       });
       logger.notice("production environment loaded");
       break;
-    case "test":
+    case "testing":
       dotenv.config({
         path: `${rootdir}/.env.test`,
       });

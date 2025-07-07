@@ -8,7 +8,8 @@ export class ApiError extends Error {
       .statusCode,
     public readonly name: string = HttpError.INTERNAL_SERVER_ERROR.error,
     public readonly message: string = HttpError.INTERNAL_SERVER_ERROR.message,
-    public readonly rawError?: object
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    public readonly rawError?: any
   ) {
     super(message);
 

@@ -12,6 +12,7 @@ function registerComponents(
 ): void {
   componentsDef.forEach((component) => {
     Container.register(component.name, component.Class, component.options);
+    logger.notice(`registered ${component.name}}`);
   });
 
   //this we can remove later if we want lazy loading

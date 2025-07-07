@@ -1,3 +1,5 @@
+import { ApiError } from "./ApiError.js";
+
 const HttpError = {
   BAD_REQUEST: {
     statusCode: 400,
@@ -23,6 +25,16 @@ const HttpError = {
     statusCode: 404,
     error: "NotFound",
     message: "The requested resource was not found",
+  },
+  USER_NOT_FOUND: {
+    statusCode: 404,
+    error: "UserNotFound",
+    message: "User not found",
+  },
+  INVALID_CREDENTIALS: {
+    statusCode: 401,
+    error: "InvalidCredentials",
+    message: "Invalid username or password",
   },
   METHOD_NOT_ALLOWED: {
     statusCode: 405,
@@ -72,7 +84,11 @@ const HttpSuccess = {
   },
   USER_REGISTERED: {
     statusCode: 201,
-    message: "User Registered Successfully",
+    message: "User registered successfully",
+  },
+  USER_LOGGED_IN: {
+    statusCode: 200,
+    message: "User logged in successfully",
   },
   ACCEPTED: {
     statusCode: 202,
@@ -84,4 +100,17 @@ const HttpSuccess = {
   },
 } as const;
 
-export { HttpError, HttpSuccess };
+function getApiError(
+  errorType: keyof typeof HttpError,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  rawError?: any
+): ApiError {
+  return new ApiError(
+    HttpError[errorType].statusCode,
+    HttpError[errorType].error,
+    HttpError[errorType].message,
+    rawError
+  );
+}
+
+export { HttpError, HttpSuccess, getApiError };
