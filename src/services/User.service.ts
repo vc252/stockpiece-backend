@@ -43,15 +43,15 @@ export default class UserService {
   private readonly verifiedUser = async (
     loginRequest: AuthRequest
   ): Promise<User> => {
-    try {
-      const user: User = await this.userRepository.findByUsername(
-        loginRequest.username
-      );
-      argon.verify(loginRequest.password, user.password);
-      return user;
-    } catch (err) {
-      throw getApiError("INVALID_CREDENTIALS", err);
+    const user: User = await this.userRepository.findByUsername(
+      loginRequest.username
+    );
+
+    if (!(await argon.verify(user.password, loginRequest.password))) {
+      throw getApiError("INVALID_CREDENTIALS");
     }
+
+    return user;
   };
 
   private readonly getAccessRefreshToken = (

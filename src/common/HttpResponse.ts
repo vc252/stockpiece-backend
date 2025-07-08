@@ -31,6 +31,11 @@ const HttpError = {
     error: "UserNotFound",
     message: "User not found",
   },
+  PASSWORD_INCORRECT: {
+    statusCode: 401,
+    error: "PasswordIncorrect",
+    message: "Password is incorrect",
+  },
   INVALID_CREDENTIALS: {
     statusCode: 401,
     error: "InvalidCredentials",

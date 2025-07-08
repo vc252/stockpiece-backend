@@ -1,5 +1,8 @@
 import CommonRoutesConfig from "../config/common.routes.config.js";
-import { createUserRequestSchema } from "../schemas/User.schema.js";
+import {
+  authRequestSchema,
+  createUserRequestSchema,
+} from "../schemas/User.schema.js";
 import asyncHandler from "../utils/asyncHandler.util.js";
 import validate from "../middlewares/validation.middleware.js";
 import Container from "../container/Container.js";
@@ -22,6 +25,13 @@ export default class UserRouter extends CommonRoutesConfig {
       .post(
         validate(createUserRequestSchema),
         asyncHandler(this.userController.registerUser)
+      );
+
+    this.router
+      .route("/user/login")
+      .post(
+        validate(authRequestSchema),
+        asyncHandler(this.userController.loginUser)
       );
   }
 }

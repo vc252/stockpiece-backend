@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { User } from "../schemas/User.schema.js";
 import * as argon from "argon2";
+import { logger } from "../utils/logger.js";
 
 const userSchema = new mongoose.Schema<User>(
   {
@@ -30,7 +31,7 @@ const userSchema = new mongoose.Schema<User>(
     },
     refreshToken: {
       type: String,
-      default: "",
+      default: null,
     },
     hasUsedReferral: {
       type: Boolean,
@@ -55,10 +56,14 @@ const userSchema = new mongoose.Schema<User>(
 //hash the password before saving
 userSchema.pre("save", async function (next) {
   try {
-    if (this.isModified("password")) {
-      const hashedPassword = await argon.hash(this.password);
-      this.password = hashedPassword;
+    if (!this.isModified("password")) {
+      logger.debug("password not modified");
+      return next();
     }
+
+    const hashedPassword = await argon.hash(this.password);
+    logger.debug(`password modified: ${hashedPassword}`);
+    this.password = hashedPassword;
     this.updatedAt = new Date();
     return next();
   } catch (err) {
