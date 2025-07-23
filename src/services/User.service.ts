@@ -1,7 +1,7 @@
-import { ApiError } from "../common/ApiError.js";
+import { roles } from "../common/constants.common.js";
 import { getApiError } from "../common/HttpResponse.js";
 import { mapUserToUserResponse } from "../common/mappings.common.js";
-import { AuthResponse } from "../common/types.common.js";
+import { UserAuthResponse, UserJwtPayload } from "../common/types.common.js";
 import env from "../config/env.config.js";
 import Container from "../container/Container.js";
 import UserRepository from "../repositories/user.repositories.js";
@@ -20,7 +20,7 @@ export default class UserService {
   private readonly userRepository: UserRepository;
 
   constructor(Container: Container) {
-    this.userRepository = Container.resolve<UserRepository>("userRepository");
+    this.userRepository = Container.resolve<UserRepository>("UserRepository");
   }
 
   public readonly registerUser = async (
@@ -28,46 +28,49 @@ export default class UserService {
   ): Promise<UserResponse> => {
     const createdUser: User = await this.userRepository.createUser(user);
     const userResponse: UserResponse = mapUserToUserResponse(createdUser);
+
     logger.info(`user created:`, userResponse);
+
     return userResponse;
   };
 
   public readonly loginUser = async (
     loginRequest: AuthRequest
-  ): Promise<AuthResponse> => {
+  ): Promise<UserAuthResponse> => {
     //first we need to find the user and then verify its password
-    const user: User = await this.verifiedUser(loginRequest);
-    return this.getAccessRefreshToken(user);
-  };
-
-  private readonly verifiedUser = async (
-    loginRequest: AuthRequest
-  ): Promise<User> => {
-    const user: User = await this.userRepository.findByUsername(
+    const user = await this.userRepository.findByUsername(
       loginRequest.username
     );
+
+    if (!user) {
+      throw getApiError("INVALID_CREDENTIALS");
+    }
 
     if (!(await argon.verify(user.password, loginRequest.password))) {
       throw getApiError("INVALID_CREDENTIALS");
     }
 
-    return user;
+    return this.getAccessRefreshToken(user);
   };
 
-  private readonly getAccessRefreshToken = (
-    user: User
-  ): { accessToken: string; refreshToken: string } => {
+  private readonly getAccessRefreshToken = (user: User): UserAuthResponse => {
+    const payload: UserJwtPayload = {
+      _id: user._id,
+      username: user.username,
+      email: user.email,
+      avatar: user.avatar,
+      lastLogin: user.lastLogin,
+      createdAt: user.createdAt,
+      role: roles.USER,
+    };
+
     const accessToken = jwt.sign(
       {
-        _id: user._id,
-        username: user.username,
-        avatar: user.avatar,
-        lastLogin: user.lastLogin,
-        createdAt: user.createdAt,
+        payload,
       },
       env.ACCESS_TOKEN_SECRET,
       {
-        expiresIn: env.ACCESS_TOKEN_EXPIRY as StringValue,
+        expiresIn: env.USER_ACCESS_TOKEN_EXPIRY as StringValue,
       }
     );
 

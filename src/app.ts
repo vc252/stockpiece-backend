@@ -5,10 +5,13 @@ import cors from "cors";
 import Container from "./container/Container.js";
 import { registerComponents } from "./container/setUpComponent.container.js";
 import { ComponenetsDef } from "./config/ComponentsDef.js";
+import cookieParser from "cookie-parser";
 
 let app: express.Application = express();
 
+app.use(cookieParser());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 //gives the original client ip instead of proxy
 //we need to do this because if we see the proxy ip then the req might be interpreted as http

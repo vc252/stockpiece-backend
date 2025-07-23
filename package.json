@@ -42,6 +42,7 @@
   "homepage": "https://github.com/vc252/stockpiece-backend#readme",
   "dependencies": {
     "argon2": "^0.43.0",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "debug": "^4.4.1",
     "dotenv": "^16.5.0",
@@ -54,6 +55,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.27.0",
+    "@types/cookie-parser": "^1.4.9",
     "@types/cors": "^2.8.18",
     "@types/debug": "^4.1.12",
     "@types/express": "^5.0.2",

@@ -3,6 +3,8 @@ import UserRepository from "../repositories/user.repositories.js";
 import UserService from "../services/User.service.js";
 import CommonRoutesConfig from "../config/common.routes.config.js";
 import Container from "../container/Container.js";
+import mongoose from "mongoose";
+import { JwtPayload } from "jsonwebtoken";
 
 type keyValueObject = {
   [key: string]: string | number;
@@ -29,14 +31,42 @@ type RouterDefType = {
   routerOptions: keyValueObject;
 }[];
 
-type AuthResponse = {
+type UserAuthResponse = {
   accessToken: string;
   refreshToken: string;
+};
+
+type AdminAuthResponse = {
+  accessToken: string;
 };
 
 interface RouterOptions {
   name: string;
   basePath: string;
+}
+
+// _id: user._id,
+// username: user.username,
+// avatar: user.avatar,
+// lastLogin: user.lastLogin,
+// createdAt: user.createdAt,
+
+interface UserJwtPayload extends JwtPayload {
+  _id: mongoose.Types.ObjectId;
+  username: string;
+  avatar: string | null;
+  email: string;
+  lastLogin: Date | null;
+  role: string;
+}
+
+interface AdminJwtPayload extends JwtPayload {
+  _id: mongoose.Types.ObjectId;
+  username: string;
+  email: string;
+  permissions: string[];
+  role: string;
+  isSuperAdmin: boolean;
 }
 
 //if we don't use the generic type then we would have
@@ -53,5 +83,8 @@ export {
   RouterOptions,
   RouterDefType,
   Constructor,
-  AuthResponse,
+  UserAuthResponse,
+  UserJwtPayload,
+  AdminJwtPayload,
+  AdminAuthResponse,
 };

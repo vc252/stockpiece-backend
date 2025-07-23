@@ -1,12 +1,17 @@
-import UserRouter from "../routes/userRouter.routes.js";
+import AdminRouter from "../routes/AdminRouter.routes.js";
+import UserRouter from "../routes/UserRouter.routes.js";
 
 export const routesDefs = [
-  //but this has specific requirements for that key value pair
-  //we are assigning UserRouter type which has a type that takes specific arguments only due to the interface we defined
+  //this is the top level component and it won't be used
+  //anywhere else so we don't need to register it or anything
   {
     name: "userRouter",
-    basePath: "users",
+    basePath: "user",
     RouterClass: UserRouter,
-    routerOptions: ["userService"],
+  },
+  {
+    name: "adminRouter",
+    basePath: "admin",
+    RouterClass: AdminRouter,
   },
 ];

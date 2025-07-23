@@ -39,8 +39,12 @@ const envSchema = z.object({
   MONGO_DB_URI: z.string(),
   ACCESS_TOKEN_SECRET: z.string(),
   REFRESH_TOKEN_SECRET: z.string(),
-  ACCESS_TOKEN_EXPIRY: z.union([z.number(), msStringValueSchema]),
+  USER_ACCESS_TOKEN_EXPIRY: z.union([z.number(), msStringValueSchema]),
+  ADMIN_ACCESS_TOKEN_EXPIRY: z.union([z.number(), msStringValueSchema]),
   REFRESH_TOKEN_EXPIRY: z.string(),
+  SUPER_ADMIN_USERNAME: z.string(),
+  SUPER_ADMIN_PASSWORD: z.string(),
+  SUPER_ADMIN_EMAIL: z.string().email(),
 });
 
 const envParsed = envSchema.safeParse(process.env);

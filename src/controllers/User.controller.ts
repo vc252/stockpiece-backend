@@ -8,13 +8,13 @@ import {
 import UserService from "../services/User.service.js";
 import { ApiResponse } from "../common/ApiResponse.js";
 import { HttpSuccess } from "../common/HttpResponse.js";
-import { AuthResponse } from "../common/types.common.js";
+import { UserAuthResponse } from "../common/types.common.js";
 import { crossSiteSafeCookieOptions } from "../config/cookie.config.js";
 
 export default class UserController {
   private readonly userService: UserService;
   constructor(container: Container) {
-    this.userService = container.resolve<UserService>("userService");
+    this.userService = container.resolve<UserService>("UserService");
   }
 
   public readonly registerUser = async (
@@ -42,7 +42,7 @@ export default class UserController {
     _: NextFunction
   ): Promise<void> => {
     const loginRequest: AuthRequest = req.body;
-    const authResponse: AuthResponse =
+    const authResponse: UserAuthResponse =
       await this.userService.loginUser(loginRequest);
 
     res
@@ -58,9 +58,9 @@ export default class UserController {
         crossSiteSafeCookieOptions
       )
       .json(
-        new ApiResponse<AuthResponse>(
-          HttpSuccess.USER_LOGGED_IN.statusCode,
-          HttpSuccess.USER_LOGGED_IN.message,
+        new ApiResponse<UserAuthResponse>(
+          HttpSuccess.LOGGED_IN.statusCode,
+          HttpSuccess.LOGGED_IN.message,
           authResponse
         )
       );

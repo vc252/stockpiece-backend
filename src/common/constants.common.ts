@@ -27,6 +27,14 @@ const permissions = {
   DELETE_STOCK: "delete_stock",
 } as const;
 
+const roles = {
+  USER: "USER",
+  ADMIN: "ADMIN",
+};
+
+type PermissionType = (typeof permissions)[keyof typeof permissions];
+type RoleType = (typeof roles)[keyof typeof roles];
+
 export {
   __filename,
   __dirname,
@@ -35,4 +43,7 @@ export {
   collections,
   defaultAvatarUrl,
   permissions,
+  PermissionType,
+  roles,
+  RoleType,
 };

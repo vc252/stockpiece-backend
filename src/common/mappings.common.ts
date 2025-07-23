@@ -1,3 +1,4 @@
+import { Admin, AdminResponse } from "../schemas/Admin.schema.js";
 import { User, UserResponse } from "../schemas/User.schema.js";
 
 /**
@@ -5,7 +6,7 @@ import { User, UserResponse } from "../schemas/User.schema.js";
  * - Converting _id from ObjectId to string
  * - Removing sensitive fields like hashedPassword
  */
-export function mapUserToUserResponse(user: User): UserResponse {
+function mapUserToUserResponse(user: User): UserResponse {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { password, ...userFields } = user;
 
@@ -14,3 +15,15 @@ export function mapUserToUserResponse(user: User): UserResponse {
     _id: user._id.toString(),
   };
 }
+
+function mapAdminToAdminResponse(admin: Admin): AdminResponse {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { password, ...adminFields } = admin;
+
+  return {
+    ...adminFields,
+    _id: admin._id.toString(),
+  };
+}
+
+export { mapUserToUserResponse, mapAdminToAdminResponse };

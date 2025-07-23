@@ -1,14 +1,18 @@
 import * as http from "http";
 import app from "./app.js";
-import { rootdir } from "./common/constants.common.js";
+import { permissions, rootdir } from "./common/constants.common.js";
 import dotenv from "dotenv";
 import connectDB from "./config/db.config.js";
 import { addMongoTransport, logger } from "./utils/logger.js";
 import mongoose from "mongoose";
 import env from "./config/env.config.js";
+import AdminRepository from "./repositories/admin.repositories.js";
+import Container from "./container/Container.js";
+import AdminService from "./services/Admin.service.js";
 
 loadEnvironment();
 await connectDB();
+initSuperAdmin();
 
 if (env.NODE_ENV === "production") {
   addMongoTransport(logger, mongoose.connection.getClient());
@@ -64,4 +68,24 @@ function loadEnvironment(): void {
     default:
       dotenv.config();
   }
+}
+
+async function initSuperAdmin(): Promise<void> {
+  const container = Container.getInstance();
+  const adminService: AdminService =
+    container.resolve<AdminService>("AdminService");
+
+  const superAdminCreated = await adminService.createSuperAdmin({
+    username: env.SUPER_ADMIN_USERNAME,
+    password: env.SUPER_ADMIN_PASSWORD,
+    email: env.SUPER_ADMIN_EMAIL,
+    permissions: Object.values(permissions),
+  });
+
+  if (!superAdminCreated) {
+    logger.notice("superAdmin already exists");
+    return;
+  }
+
+  logger.notice("superAdmin created");
 }

@@ -16,6 +16,11 @@ const HttpError = {
     error: "Unauthorized",
     message: "Authentication is required or failed",
   },
+  ACCESS_TOKEN_MISSING: {
+    statusCode: 401,
+    error: "AccessTokenMissing",
+    message: "Access token is required but not provided",
+  },
   FORBIDDEN: {
     statusCode: 403,
     error: "Forbidden",
@@ -40,6 +45,11 @@ const HttpError = {
     statusCode: 401,
     error: "InvalidCredentials",
     message: "Invalid username or password",
+  },
+  INVALID_ACCESS_TOKEN: {
+    statusCode: 401,
+    error: "InvalidAccessToken",
+    message: "Access token is invalid or expired",
   },
   METHOD_NOT_ALLOWED: {
     statusCode: 405,
@@ -91,9 +101,13 @@ const HttpSuccess = {
     statusCode: 201,
     message: "User registered successfully",
   },
-  USER_LOGGED_IN: {
+  ADMIN_CREATED: {
+    statusCode: 201,
+    message: "Admin created successfully",
+  },
+  LOGGED_IN: {
     statusCode: 200,
-    message: "User logged in successfully",
+    message: "logged in successfully",
   },
   ACCEPTED: {
     statusCode: 202,

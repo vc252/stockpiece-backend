@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
-import { User } from "../schemas/User.schema.js";
+import { Admin } from "../schemas/Admin.schema.js";
+import { permissions } from "../common/constants.common.js";
 import * as argon from "argon2";
 
-const userSchema = new mongoose.Schema<User>(
+const adminSchema = new mongoose.Schema<Admin>(
   {
     username: {
       type: String,
@@ -28,32 +29,26 @@ const userSchema = new mongoose.Schema<User>(
         "Please enter a valid email address",
       ],
     },
-    refreshToken: {
-      type: String,
-      default: null,
+    permissions: {
+      type: [String],
+      enum: Object.values(permissions),
+      validate: {
+        validator: function (arr: string[]) {
+          return Array.isArray(arr) && new Set(arr).size === arr.length;
+        },
+        message: "Permission already granted",
+      },
+      default: [],
     },
-    hasUsedReferral: {
+    isSuperAdmin: {
       type: Boolean,
       default: false,
-    },
-    lastLogin: {
-      type: Date,
-      default: null,
-    },
-    avatar: {
-      type: String,
-      default: null,
-    },
-    accountValue: {
-      type: Number,
-      default: 0,
     },
   },
   { timestamps: true }
 );
 
-//hash the password before saving
-userSchema.pre("save", async function (next) {
+adminSchema.pre("save", async function (next) {
   try {
     if (!this.isModified("password")) {
       return next();
@@ -67,6 +62,6 @@ userSchema.pre("save", async function (next) {
   }
 });
 
-const UserModel = mongoose.model<User>("User", userSchema);
+const adminModel = mongoose.model("Admin", adminSchema);
 
-export default UserModel;
+export default adminModel;

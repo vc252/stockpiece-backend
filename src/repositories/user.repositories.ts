@@ -12,10 +12,12 @@ export default class UserRepository {
     return parseDbResponseOrThrow<User>(userSchema, createdUser.toObject());
   };
 
-  public readonly findByUsername = async (username: string): Promise<User> => {
+  public readonly findByUsername = async (
+    username: string
+  ): Promise<User | null> => {
     const user = await UserModel.findOne({ username }).lean();
     if (!user) {
-      throw getApiError("USER_NOT_FOUND");
+      return null;
     }
     return parseDbResponseOrThrow<User>(userSchema, user);
   };

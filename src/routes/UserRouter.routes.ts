@@ -15,20 +15,20 @@ export default class UserRouter extends CommonRoutesConfig {
   constructor(name: string, basePath: string, Container: Container) {
     super(name, basePath);
 
-    this.userController = Container.resolve<UserController>("userController");
+    this.userController = Container.resolve<UserController>("UserController");
     logger.debug(JSON.stringify(this.userController));
   }
 
   public configurRoutes(): void {
     this.router
-      .route("/user")
+      .route("/")
       .post(
         validate(createUserRequestSchema),
         asyncHandler(this.userController.registerUser)
       );
 
     this.router
-      .route("/user/login")
+      .route("/login")
       .post(
         validate(authRequestSchema),
         asyncHandler(this.userController.loginUser)
