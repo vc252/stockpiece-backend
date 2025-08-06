@@ -19,4 +19,12 @@ export default class UserRepository {
     }
     return parseDbResponseOrThrow<User>(userSchema, user);
   };
+
+  public readonly findById = async (_id: string): Promise<User | null> => {
+    const user = await UserModel.findById(_id);
+    if (!user) {
+      return null;
+    }
+    return parseDbResponseOrThrow<User>(userSchema, user);
+  };
 }
