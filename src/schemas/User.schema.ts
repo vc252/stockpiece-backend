@@ -56,13 +56,7 @@ const userResponseSchema = userSchema
     _id: z.string(), // Convert ObjectId to string for API responses
   });
 
-export const updateAvatarRequestSchema = z.object({
-  avatar: z.string().url("Avatar must be a valid URL"),
-});
-
-export type UpdateAvatarRequest = z.infer<typeof updateAvatarRequestSchema>;
-
-export const UpdateAvatarResponseSchema = z.object({
+export const updateAvatarResponseSchema = z.object({
   _id: z.string(),
   username: z.string(),
   email: z.string().email(),
@@ -77,7 +71,7 @@ type AuthRequest = z.infer<typeof authRequestSchema>;
 type UserResponse = Omit<User, "password" | "refreshToken" | "_id"> & {
   _id: string;
 };
-export type UpdateAvatarResponse = z.infer<typeof UpdateAvatarResponseSchema>;
+export type UpdateAvatarResponse = z.infer<typeof updateAvatarResponseSchema>;
 
 export {
   User,

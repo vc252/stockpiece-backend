@@ -1,4 +1,4 @@
-import { defaultAvatarUrl, roles } from "../common/constants.common.js";
+import { roles } from "../common/constants.common.js";
 import { getApiError } from "../common/HttpResponse.js";
 import { mapUserToUserResponse } from "../common/mappings.common.js";
 import { UserAuthResponse, UserJwtPayload } from "../common/types.common.js";
@@ -10,7 +10,6 @@ import {
   AuthRequest,
   User,
   UserResponse,
-  UpdateAvatarRequest,
   UpdateAvatarResponse,
 } from "../schemas/User.schema.js";
 import { logger } from "../utils/logger.js";
@@ -71,15 +70,9 @@ export default class UserService {
       role: roles.USER,
     };
 
-    const accessToken = jwt.sign(
-      {
-        payload,
-      },
-      env.ACCESS_TOKEN_SECRET,
-      {
-        expiresIn: env.USER_ACCESS_TOKEN_EXPIRY as StringValue,
-      }
-    );
+    const accessToken = jwt.sign(payload, env.ACCESS_TOKEN_SECRET, {
+      expiresIn: env.USER_ACCESS_TOKEN_EXPIRY as StringValue,
+    });
 
     const refreshToken = jwt.sign(
       {
@@ -96,7 +89,7 @@ export default class UserService {
 
   public readonly updateAvatar = async (
     userId: string,
-    request: UpdateAvatarRequest
+    avatarFilePath: string
   ): Promise<UpdateAvatarResponse> => {
     try {
       // Get user to check if they have an existing avatar
@@ -105,8 +98,24 @@ export default class UserService {
         throw getApiError("USER_NOT_FOUND");
       }
 
+      // Upload new avatar to Cloudinary
+      const newAvatarUrl = await this.fileUploadService.uploadOnCloudinary(
+        avatarFilePath,
+        {
+          folder: "user-avatars",
+          processImage: true,
+          width: 300,
+          height: 300,
+          quality: 80,
+          displayName: `${existingUser.username}-avatar`,
+        }
+      );
+
       // Only delete from Cloudinary if it's NOT the default avatar
-      if (existingUser.avatar && existingUser.avatar !== defaultAvatarUrl) {
+      if (
+        existingUser.avatar &&
+        existingUser.avatar !== this.fileUploadService.getDefaultAvatarUrl()
+      ) {
         try {
           await this.fileUploadService.deleteFromCloudinary(
             existingUser.avatar,
@@ -120,7 +129,7 @@ export default class UserService {
 
       // Update user avatar
       const updatedUser = await this.userRepository.updateById(userId, {
-        avatar: request.avatar,
+        avatar: newAvatarUrl,
       });
 
       if (!updatedUser) {

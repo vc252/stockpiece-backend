@@ -5,7 +5,6 @@ import {
   AuthRequest,
   UserResponse,
   UpdateAvatarResponse,
-  UpdateAvatarRequest,
 } from "../schemas/User.schema.js";
 import UserService from "../services/User.service.js";
 import { ApiResponse } from "../common/ApiResponse.js";
@@ -68,21 +67,22 @@ export default class UserController {
   };
 
   public readonly updateAvatar = async (
-    req: Request<object, object, UpdateAvatarRequest>,
+    req: Request,
     res: Response<ApiResponse<UpdateAvatarResponse>>,
     _: NextFunction
   ): Promise<void> => {
-    const updateRequest = req.body;
     const userId = req.payload?._id;
+    const avatarFile = req.file?.path;
 
     if (!userId) {
       throw getApiError("UNAUTHORIZED");
     }
 
-    const updatedUser = await this.userService.updateAvatar(
-      userId,
-      updateRequest
-    );
+    if (!avatarFile) {
+      throw getApiError("BAD_REQUEST", "Avatar file is required");
+    }
+
+    const updatedUser = await this.userService.updateAvatar(userId, avatarFile);
 
     res
       .status(HttpSuccess.OK.statusCode)

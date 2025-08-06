@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
 import { User } from "../schemas/User.schema.js";
 import * as argon from "argon2";
-import { defaultAvatarUrl } from "../common/constants.common.js";
+import Container from "../container/Container.js";
+import FileUploadService from "../services/FileUploaderService.js";
 
 const userSchema = new mongoose.Schema<User>(
   {
@@ -43,7 +44,10 @@ const userSchema = new mongoose.Schema<User>(
     },
     avatar: {
       type: String,
-      default: defaultAvatarUrl,
+      default: () =>
+        Container.getInstance()
+          .resolve<FileUploadService>("FileUploadService")
+          .getDefaultAvatarUrl(),
     },
     accountValue: {
       type: Number,

@@ -21,6 +21,7 @@ const verifyUserJwt = async (
   try {
     const payload = jwt.verify(accessToken, env.ACCESS_TOKEN_SECRET);
     req.payload = payload as UserJwtPayload;
+    logger.debug("payload: ", req.payload);
     next();
   } catch (err) {
     throw getApiError("INVALID_ACCESS_TOKEN", err);

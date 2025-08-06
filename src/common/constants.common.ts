@@ -1,6 +1,5 @@
 import { fileURLToPath } from "node:url";
 import { dirname, resolve, join } from "node:path";
-import { v2 as cloudinary } from "cloudinary";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -13,11 +12,6 @@ const collections = {
   ADMIN: "admins",
   USERS: "users",
 } as const;
-
-const defaultAvatarPublicId = "luffy_processed_wm5fus";
-const defaultAvatarUrl = cloudinary.url(defaultAvatarPublicId, {
-  secure: true,
-});
 
 const UPLOAD_PATH = join(__dirname, "../public/temp");
 const MAX_FILE_SIZE = 1024 * 1024 * 5; // 5MB
@@ -55,7 +49,6 @@ export {
   rootdir,
   DB_NAME,
   collections,
-  defaultAvatarUrl,
   permissions,
   PermissionType,
   roles,

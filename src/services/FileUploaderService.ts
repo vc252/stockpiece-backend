@@ -9,6 +9,8 @@ import { extractPublicId } from "cloudinary-build-url";
 
 export default class FileUploadService {
   private readonly imageProcessingService: ImageProcessingService;
+  private readonly defaultAvatarPublicId = "luffy_processed_wm5fus";
+  private readonly defaultAvatarUrl: string;
 
   constructor(container: Container) {
     cloudinary.config({
@@ -18,8 +20,16 @@ export default class FileUploadService {
       secure: true,
     });
 
+    this.defaultAvatarUrl = cloudinary.url(this.defaultAvatarPublicId, {
+      secure: true,
+    });
+
     this.imageProcessingService = container.resolve("ImageProcessingService");
   }
+
+  public readonly getDefaultAvatarUrl = (): string => {
+    return this.defaultAvatarUrl;
+  };
 
   private readonly deleteTempFile = async (
     localFilePath: string
@@ -30,12 +40,12 @@ export default class FileUploadService {
         return;
       }
 
-      logger.debug("Attempting to delete file at:", localFilePath);
-      logger.debug("Exists before deletion:", fs.existsSync(localFilePath));
+      logger.debug(`Attempting to delete file at: ${localFilePath}`);
+      logger.debug(`Exists before deletion: ${fs.existsSync(localFilePath)}`);
 
       await fs.promises.unlink(localFilePath);
 
-      logger.debug("File deleted:", !fs.existsSync(localFilePath));
+      logger.debug(`File deleted: ${!fs.existsSync(localFilePath)}`);
     } catch (error) {
       logger.error("Error deleting temp file:", error);
     }
@@ -94,6 +104,11 @@ export default class FileUploadService {
       return uploadResult.secure_url;
     } catch (err) {
       throw getApiError("CLOUDINARY_UPLOAD_FAILED", err);
+    } finally {
+      this.deleteTempFile(localFilePath);
+      if (localFilePath != finalFilePath) {
+        this.deleteTempFile(finalFilePath);
+      }
     }
   };
 
@@ -111,8 +126,7 @@ export default class FileUploadService {
     }
 
     try {
-      const destroyResult = await cloudinary.uploader.destroy(publicId);
-      logger.debug("destroy result: ", destroyResult);
+      await cloudinary.uploader.destroy(publicId);
     } catch (err) {
       throw getApiError("CLOUDINARY_DESTROY_FAILED", err);
     }
