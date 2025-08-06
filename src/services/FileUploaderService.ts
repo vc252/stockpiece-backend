@@ -1,6 +1,6 @@
 import { v2 as cloudinary, UploadApiOptions } from "cloudinary";
 import Container from "../container/Container.js";
-import env from "../config/env.config";
+import env from "../config/env.config.js";
 import ImageProcessingService from "./ImageProcessingService.js";
 import { logger } from "../utils/logger.js";
 import fs from "node:fs";

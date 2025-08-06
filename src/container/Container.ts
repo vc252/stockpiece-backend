@@ -1,13 +1,14 @@
 import { Constructor } from "../common/types.common.js";
+import { ComponentName } from "../config/ComponentsDef.js";
 
 export default class Container {
   private static instance: Container;
 
   private readonly registry: Map<
-    string,
-    { Class: Constructor<unknown>; dependencies: string[] }
+    ComponentName,
+    { Class: Constructor<unknown>; dependencies: ComponentName[] }
   >;
-  private readonly components: Map<string, unknown>;
+  private readonly components: Map<ComponentName, unknown>;
 
   private constructor() {
     this.registry = new Map();
@@ -25,9 +26,9 @@ export default class Container {
   //all the dependencies reference before we can initialize them
   //we are not using this Class anywhere so no need to pass a type to it
   public register(
-    name: string,
+    name: ComponentName,
     Class: Constructor<unknown>,
-    dependencies: string[]
+    dependencies: ComponentName[]
   ) {
     this.registry.set(name, {
       Class,
@@ -35,7 +36,7 @@ export default class Container {
     });
   }
 
-  public resolve<T>(name: string): T {
+  public resolve<T>(name: ComponentName): T {
     if (this.components.get(name)) {
       return this.components.get(name) as T;
     }

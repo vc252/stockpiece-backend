@@ -1,13 +1,9 @@
-import { Constructor } from "../common/types.common.js";
+import { ComponentDefinition } from "../config/ComponentsDef.js";
 import Container from "./Container.js";
 
 function registerComponents(
   Container: Container,
-  componentsDef: {
-    name: string;
-    Class: Constructor<unknown>;
-    options: string[];
-  }[]
+  componentsDef: ComponentDefinition[]
 ): void {
   componentsDef.forEach((component) => {
     Container.register(component.name, component.Class, component.options);

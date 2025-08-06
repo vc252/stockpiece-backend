@@ -55,30 +55,6 @@ export default defineConfig([
     }
   },
   {
-    files: ["tests/**/*.ts"],
-    plugins: { 
-      ts: tseslint,
-      import: eslintPluginImport
-    },
-    extends: tseslint.configs.recommended,
-    rules: {
-      "@typescript-eslint/no-explicit-any": "off",
-      "@typescript-eslint/no-unused-vars": [
-        'warn',
-        {
-          argsIgnorePattern: '^_',
-          varsIgnorePattern: '^_',
-          caughtErrorsIgnorePattern: '^_',
-          destructuredArrayIgnorePattern: '^_'
-        }
-      ],
-      'import/extensions': ['error', 'always', {
-        js: 'always',
-        ts: 'never'
-      }]
-    }
-  },
-  {
     files: ["src/**/*.ts"],
     plugins: { eslintPluginImport },
     extends: []
