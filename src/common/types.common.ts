@@ -3,7 +3,6 @@ import UserRepository from "../repositories/user.repositories.js";
 import UserService from "../services/User.service.js";
 import CommonRoutesConfig from "../config/common.routes.config.js";
 import Container from "../container/Container.js";
-import mongoose from "mongoose";
 import { JwtPayload } from "jsonwebtoken";
 
 type keyValueObject = {
@@ -52,7 +51,7 @@ interface RouterOptions {
 // createdAt: user.createdAt,
 
 interface UserJwtPayload extends JwtPayload {
-  _id: mongoose.Types.ObjectId;
+  _id: string;
   username: string;
   avatar: string | null;
   email: string;
@@ -61,7 +60,7 @@ interface UserJwtPayload extends JwtPayload {
 }
 
 interface AdminJwtPayload extends JwtPayload {
-  _id: mongoose.Types.ObjectId;
+  _id: string;
   username: string;
   email: string;
   permissions: string[];

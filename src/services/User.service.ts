@@ -1,4 +1,4 @@
-import { roles } from "../common/constants.common.js";
+import { defaultAvatarUrl, roles } from "../common/constants.common.js";
 import { getApiError } from "../common/HttpResponse.js";
 import { mapUserToUserResponse } from "../common/mappings.common.js";
 import { UserAuthResponse, UserJwtPayload } from "../common/types.common.js";
@@ -10,17 +10,24 @@ import {
   AuthRequest,
   User,
   UserResponse,
+  UpdateAvatarRequest,
+  UpdateAvatarResponse,
 } from "../schemas/User.schema.js";
 import { logger } from "../utils/logger.js";
 import * as argon from "argon2";
 import jwt from "jsonwebtoken";
 import { StringValue } from "ms";
+import FileUploadService from "./FileUploaderService.js";
+import { ApiError } from "../common/ApiError.js";
 
 export default class UserService {
   private readonly userRepository: UserRepository;
+  private readonly fileUploadService: FileUploadService;
 
   constructor(Container: Container) {
     this.userRepository = Container.resolve<UserRepository>("UserRepository");
+    this.fileUploadService =
+      Container.resolve<FileUploadService>("FileUploadService");
   }
 
   public readonly registerUser = async (
@@ -55,7 +62,7 @@ export default class UserService {
 
   private readonly getAccessRefreshToken = (user: User): UserAuthResponse => {
     const payload: UserJwtPayload = {
-      _id: user._id,
+      _id: user._id.toString(),
       username: user.username,
       email: user.email,
       avatar: user.avatar,
@@ -85,5 +92,53 @@ export default class UserService {
     );
 
     return { accessToken, refreshToken };
+  };
+
+  public readonly updateAvatar = async (
+    userId: string,
+    request: UpdateAvatarRequest
+  ): Promise<UpdateAvatarResponse> => {
+    try {
+      // Get user to check if they have an existing avatar
+      const existingUser = await this.userRepository.findById(userId);
+      if (!existingUser) {
+        throw getApiError("USER_NOT_FOUND");
+      }
+
+      // Only delete from Cloudinary if it's NOT the default avatar
+      if (existingUser.avatar && existingUser.avatar !== defaultAvatarUrl) {
+        try {
+          await this.fileUploadService.deleteFromCloudinary(
+            existingUser.avatar,
+            true
+          );
+        } catch (error) {
+          // Log but don't fail the update if old avatar deletion fails
+          logger.warn("Failed to delete old avatar:", error);
+        }
+      }
+
+      // Update user avatar
+      const updatedUser = await this.userRepository.updateById(userId, {
+        avatar: request.avatar,
+      });
+
+      if (!updatedUser) {
+        throw getApiError("USER_NOT_FOUND");
+      }
+
+      return {
+        _id: updatedUser._id.toString(),
+        username: updatedUser.username,
+        email: updatedUser.email,
+        avatar: updatedUser.avatar!,
+        updatedAt: updatedUser.updatedAt,
+      };
+    } catch (error) {
+      if (error instanceof ApiError) {
+        throw error;
+      }
+      throw getApiError("INTERNAL_SERVER_ERROR", error);
+    }
   };
 }

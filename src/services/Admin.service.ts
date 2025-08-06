@@ -78,7 +78,7 @@ export default class AdminService {
 
   private readonly getAdminAccessToken = (admin: Admin): string => {
     const payload: AdminJwtPayload = {
-      _id: admin._id,
+      _id: admin._id.toString(),
       username: admin.username,
       email: admin.email,
       permissions: admin.permissions || [],
