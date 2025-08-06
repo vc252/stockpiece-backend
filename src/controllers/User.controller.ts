@@ -4,10 +4,12 @@ import {
   CreateUserRequest,
   AuthRequest,
   UserResponse,
+  UpdateAvatarResponse,
+  UpdateAvatarRequest,
 } from "../schemas/User.schema.js";
 import UserService from "../services/User.service.js";
 import { ApiResponse } from "../common/ApiResponse.js";
-import { HttpSuccess } from "../common/HttpResponse.js";
+import { getApiError, HttpSuccess } from "../common/HttpResponse.js";
 import { UserAuthResponse } from "../common/types.common.js";
 import { crossSiteSafeCookieOptions } from "../config/cookie.config.js";
 
@@ -61,6 +63,34 @@ export default class UserController {
           HttpSuccess.LOGGED_IN.statusCode,
           HttpSuccess.LOGGED_IN.message,
           authResponse
+        )
+      );
+  };
+
+  public readonly updateAvatar = async (
+    req: Request<object, object, UpdateAvatarRequest>,
+    res: Response<ApiResponse<UpdateAvatarResponse>>,
+    _: NextFunction
+  ): Promise<void> => {
+    const updateRequest = req.body;
+    const userId = req.payload?._id;
+
+    if (!userId) {
+      throw getApiError("UNAUTHORIZED");
+    }
+
+    const updatedUser = await this.userService.updateAvatar(
+      userId,
+      updateRequest
+    );
+
+    res
+      .status(HttpSuccess.OK.statusCode)
+      .json(
+        new ApiResponse<UpdateAvatarResponse>(
+          HttpSuccess.OK.statusCode,
+          "Avatar updated successfully",
+          updatedUser
         )
       );
   };

@@ -27,4 +27,17 @@ export default class UserRepository {
     }
     return parseDbResponseOrThrow<User>(userSchema, user);
   };
+
+  public readonly updateById = async (
+    _id: string,
+    updateBody: Partial<User>
+  ): Promise<User | null> => {
+    const user = await UserModel.findByIdAndUpdate(_id, updateBody, {
+      new: true,
+    });
+    if (!user) {
+      return null;
+    }
+    return parseDbResponseOrThrow<User>(userSchema, user);
+  };
 }
