@@ -2,14 +2,14 @@ import { NextFunction, Request, Response } from "express";
 import { getApiError } from "../common/HttpResponse.js";
 import jwt from "jsonwebtoken";
 import env from "../config/env.config.js";
-import { UserJwtPayload } from "../common/types.common.js";
+import { UserJwtPayload, AdminJwtPayload } from "../common/types.common.js";
 import { logger } from "../utils/logger.js";
 
 const verifyUserJwt = async (
   req: Request,
-  res: Response,
+  _: Response,
   next: NextFunction
-) => {
+): Promise<void> => {
   const accessToken =
     req.cookies?.accessToken ||
     req.headers?.authorization?.replace("Bearer ", "");
@@ -29,9 +29,9 @@ const verifyUserJwt = async (
 
 const verifyAdminJwt = async (
   req: Request,
-  res: Response,
+  _: Response,
   next: NextFunction
-) => {
+): Promise<void> => {
   const accessToken =
     req.cookies?.accessToken ||
     req.headers?.authorization?.replace("Bearer ", "");
@@ -42,7 +42,7 @@ const verifyAdminJwt = async (
 
   try {
     const payload = jwt.verify(accessToken, env.ACCESS_TOKEN_SECRET);
-    req.payload = payload as UserJwtPayload;
+    req.payload = payload as AdminJwtPayload;
     next();
   } catch (err) {
     throw getApiError("INVALID_ACCESS_TOKEN", err);
@@ -50,7 +50,11 @@ const verifyAdminJwt = async (
 };
 
 const checkPermissions = (requiredPermissions: string[]) => {
-  return async (req: Request, res: Response, next: NextFunction) => {
+  return async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
     if (!req.payload) {
       throw getApiError("UNAUTHORIZED");
     }
@@ -67,7 +71,11 @@ const checkPermissions = (requiredPermissions: string[]) => {
   };
 };
 
-const checkSuperAdmin = (req: Request, res: Response, next: NextFunction) => {
+const checkSuperAdmin = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
   logger.debug("payload: ", req.payload);
   if (!req.payload) {
     throw getApiError("UNAUTHORIZED");

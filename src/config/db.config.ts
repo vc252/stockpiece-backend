@@ -1,12 +1,13 @@
 import mongoose from "mongoose";
 import { logger } from "../utils/logger.js";
 import { DB_NAME } from "../common/constants.common.js";
+import env from "./env.config.js";
 
 async function connectDB(): Promise<void> {
   try {
     logger.notice(`trying connecting to mongoDB...`);
     const connectionInstance = await mongoose.connect(
-      `${process.env.MONGO_DB_URI || ""}/${DB_NAME}`
+      `${env.MONGO_DB_URI || ""}/${DB_NAME}`
     );
     logger.notice(
       `MongoDB connected host: ${connectionInstance.connection.host} port: ${connectionInstance.connection.port}`

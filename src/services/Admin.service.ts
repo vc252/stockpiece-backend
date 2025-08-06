@@ -41,14 +41,7 @@ export default class AdminService {
     return true;
   };
 
-  public readonly createAdmin = async (
-    admin: CreateNonSuperAdminRequest,
-    payload: AdminJwtPayload
-  ) => {
-    if (!payload?.isSuperAdmin) {
-      throw getApiError("FORBIDDEN");
-    }
-
+  public readonly createAdmin = async (admin: CreateNonSuperAdminRequest) => {
     if (
       !this.adminRepository.usernameOrEmailExists(admin.username, admin.email)
     ) {

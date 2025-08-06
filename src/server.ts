@@ -6,32 +6,49 @@ import connectDB from "./config/db.config.js";
 import { addMongoTransport, logger } from "./utils/logger.js";
 import mongoose from "mongoose";
 import env from "./config/env.config.js";
-import AdminRepository from "./repositories/admin.repositories.js";
 import Container from "./container/Container.js";
 import AdminService from "./services/Admin.service.js";
 
 loadEnvironment();
-await connectDB();
-initSuperAdmin();
 
-if (env.NODE_ENV === "production") {
-  addMongoTransport(logger, mongoose.connection.getClient());
+// Start server initialization
+startServer();
+
+async function startServer(): Promise<void> {
+  try {
+    // Wait for database connection to complete
+    await connectDB();
+    logger.notice("Database connected successfully");
+
+    // Initialize super admin after DB connection
+    await initSuperAdmin();
+
+    // Add production logging after DB connection
+    if (env.NODE_ENV === "production") {
+      addMongoTransport(logger, mongoose.connection.getClient());
+    }
+
+    // Start the HTTP server
+    const server: http.Server = http.createServer(app);
+    const port = env.PORT;
+    const host = env.HOST;
+
+    server.listen(port, () => {
+      logger.notice(
+        `server started env:${process.env.NODE_ENV} host:${host} port: ${port}`
+      );
+    });
+
+    // Setup graceful shutdown
+    process.on("SIGINT", () => shutdown(server));
+    process.on("SIGTERM", () => shutdown(server));
+  } catch (error) {
+    logger.error("Failed to start server:", error);
+    process.exit(1);
+  }
 }
 
-const server: http.Server = http.createServer(app);
-const port = env.PORT;
-const host = env.HOST;
-
-server.listen(port, () => {
-  logger.notice(
-    `server started env:${process.env.NODE_ENV} host:${host} port: ${port}`
-  );
-});
-
-process.on("SIGINT", shutdown);
-process.on("SIGTERM", shutdown);
-
-function shutdown(): void {
+function shutdown(server: http.Server): void {
   logger.notice("Received shutdown signal");
   server.close(() => {
     mongoose.connection.close();
@@ -71,21 +88,26 @@ function loadEnvironment(): void {
 }
 
 async function initSuperAdmin(): Promise<void> {
-  const container = Container.getInstance();
-  const adminService: AdminService =
-    container.resolve<AdminService>("AdminService");
+  try {
+    const container = Container.getInstance();
+    const adminService: AdminService =
+      container.resolve<AdminService>("AdminService");
 
-  const superAdminCreated = await adminService.createSuperAdmin({
-    username: env.SUPER_ADMIN_USERNAME,
-    password: env.SUPER_ADMIN_PASSWORD,
-    email: env.SUPER_ADMIN_EMAIL,
-    permissions: Object.values(permissions),
-  });
+    const superAdminCreated = await adminService.createSuperAdmin({
+      username: env.SUPER_ADMIN_USERNAME,
+      password: env.SUPER_ADMIN_PASSWORD,
+      email: env.SUPER_ADMIN_EMAIL,
+      permissions: Object.values(permissions),
+    });
 
-  if (!superAdminCreated) {
-    logger.notice("superAdmin already exists");
-    return;
+    if (!superAdminCreated) {
+      logger.notice("superAdmin already exists");
+      return;
+    }
+
+    logger.notice("superAdmin created");
+  } catch (error) {
+    logger.error("Failed to initialize super admin:", error);
+    throw error; // Re-throw to be caught by startServer
   }
-
-  logger.notice("superAdmin created");
 }

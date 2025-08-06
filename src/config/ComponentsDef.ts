@@ -3,6 +3,8 @@ import UserController from "../controllers/User.controller.js";
 import AdminRepository from "../repositories/admin.repositories.js";
 import UserRepository from "../repositories/user.repositories.js";
 import AdminService from "../services/Admin.service.js";
+import FileUploadService from "../services/CloudinaryService.js";
+import ImageProcessingService from "../services/ImageProcessingService.js";
 import UserService from "../services/User.service.js";
 
 export const ComponenetsDef = [
@@ -16,6 +18,16 @@ export const ComponenetsDef = [
     name: "AdminService",
     Class: AdminService,
     options: ["AdminRepository"],
+  },
+  {
+    name: "ImageProcessingService",
+    Class: ImageProcessingService,
+    options: [],
+  },
+  {
+    name: "FileUploadService",
+    Class: FileUploadService,
+    options: ["ImageProcessingService"],
   },
   //repositories
   {

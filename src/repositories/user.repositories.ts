@@ -1,5 +1,3 @@
-import { ApiError } from "../common/ApiError.js";
-import { getApiError, HttpError } from "../common/HttpResponse.js";
 import UserModel from "../models/user.model.js";
 import { CreateUserRequest, User, userSchema } from "../schemas/User.schema.js";
 import { parseDbResponseOrThrow } from "../utils/parseOrThrow.util.js";

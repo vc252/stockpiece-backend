@@ -1,5 +1,4 @@
 import { Constructor } from "../common/types.common.js";
-import { logger } from "../utils/logger.js";
 import Container from "./Container.js";
 
 function registerComponents(

@@ -1,9 +1,12 @@
 import { Request, Response, NextFunction } from "express";
-import { AdminAuthResponse, AdminJwtPayload } from "../common/types.common.js";
+import { AdminAuthResponse } from "../common/types.common.js";
 import Container from "../container/Container.js";
 import AdminService from "../services/Admin.service.js";
 import { ApiResponse } from "../common/ApiResponse.js";
-import { AdminResponse } from "../schemas/Admin.schema.js";
+import {
+  AdminResponse,
+  CreateNonSuperAdminRequest,
+} from "../schemas/Admin.schema.js";
 import { HttpSuccess } from "../common/HttpResponse.js";
 import { crossSiteSafeCookieOptions } from "../config/cookie.config.js";
 import { AuthRequest } from "../schemas/User.schema.js";
@@ -16,14 +19,11 @@ export default class AdminController {
   }
 
   public readonly createAdmin = async (
-    req: Request,
-    res: Response,
+    req: Request<object, object, CreateNonSuperAdminRequest>,
+    res: Response<ApiResponse<AdminResponse>>,
     _: NextFunction
   ): Promise<void> => {
-    const createdAdmin = await this.adminService.createAdmin(
-      req.body,
-      req.payload as AdminJwtPayload
-    );
+    const createdAdmin = await this.adminService.createAdmin(req.body);
 
     res
       .status(200)
@@ -37,13 +37,12 @@ export default class AdminController {
   };
 
   public readonly loginAdmin = async (
-    req: Request,
+    req: Request<object, object, AuthRequest, object>,
     res: Response,
     _: NextFunction
   ): Promise<void> => {
-    const loginRequest: AuthRequest = req.body;
-    const authResponse: AdminAuthResponse =
-      await this.adminService.loginAdmin(loginRequest);
+    const loginRequest = req.body;
+    const authResponse = await this.adminService.loginAdmin(loginRequest);
 
     res
       .status(HttpSuccess.LOGGED_IN.statusCode)
@@ -53,7 +52,7 @@ export default class AdminController {
         crossSiteSafeCookieOptions
       )
       .json(
-        new ApiResponse<{ accessToken: string }>(
+        new ApiResponse<AdminAuthResponse>(
           HttpSuccess.LOGGED_IN.statusCode,
           HttpSuccess.LOGGED_IN.message,
           authResponse

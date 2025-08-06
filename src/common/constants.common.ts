@@ -1,5 +1,5 @@
 import { fileURLToPath } from "node:url";
-import { dirname, resolve } from "node:path";
+import { dirname, resolve, join } from "node:path";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -14,6 +14,16 @@ const collections = {
 } as const;
 
 const defaultAvatarUrl = "";
+
+const UPLOAD_PATH = join(__dirname, "../public/temp");
+const MAX_FILE_SIZE = 1024 * 1024 * 5; // 5MB
+const ALLOWED_EXTENSIONS = /\.(jpg|jpeg|png|gif|webp)$/i;
+const ALLOWED_MIME_TYPES = [
+  "image/jpeg",
+  "image/png",
+  "image/gif",
+  "image/webp",
+];
 
 const permissions = {
   MARKET_CONTROL: "market_control", // can open/close market and toggle next chapter release
@@ -46,4 +56,8 @@ export {
   PermissionType,
   roles,
   RoleType,
+  UPLOAD_PATH,
+  MAX_FILE_SIZE,
+  ALLOWED_EXTENSIONS,
+  ALLOWED_MIME_TYPES,
 };

@@ -5,7 +5,7 @@ const checkNull = (object: unknown) => {
   if (!object) {
     throw new ApiError(
       HttpError.INTERNAL_SERVER_ERROR.statusCode,
-      HttpError.INTERNAL_SERVER_ERROR.error,
+      HttpError.INTERNAL_SERVER_ERROR.name,
       HttpError.INTERNAL_SERVER_ERROR.message
     );
   }

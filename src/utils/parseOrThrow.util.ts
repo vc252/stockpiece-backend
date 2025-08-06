@@ -8,7 +8,7 @@ function parseRequestOrThrow<T>(schema: ZodSchema, data: unknown): T {
   if (!parsed.success) {
     throw new ApiError(
       HttpError.VALIDATION_ERROR.statusCode,
-      HttpError.VALIDATION_ERROR.error,
+      HttpError.VALIDATION_ERROR.name,
       "Invalid request body",
       parsed.error.format()
     );
@@ -22,7 +22,7 @@ function parseDbResponseOrThrow<T>(schema: ZodSchema, data: unknown): T {
     logger.error("Invalid data from database", ...parsed.error.errors);
     throw new ApiError(
       HttpError.INTERNAL_SERVER_ERROR.statusCode,
-      HttpError.INTERNAL_SERVER_ERROR.error,
+      HttpError.INTERNAL_SERVER_ERROR.name,
       "Invalid data from database",
       parsed.error.format()
     );

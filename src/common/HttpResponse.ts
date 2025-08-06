@@ -3,87 +3,97 @@ import { ApiError } from "./ApiError.js";
 const HttpError = {
   BAD_REQUEST: {
     statusCode: 400,
-    error: "BadRequest",
+    name: "BadRequest",
     message: "The request is invalid or malformed",
   },
   VALIDATION_ERROR: {
     statusCode: 400,
-    error: "ValidationError",
+    name: "BadRequest",
     message: "Invalid request body",
+  },
+  INVALID_CLOUDINARY_URL: {
+    statusCode: 400,
+    name: "BadRequest",
+    message: "Invalid Cloudinary URL provided",
   },
   UNAUTHORIZED: {
     statusCode: 401,
-    error: "Unauthorized",
+    name: "Unauthorized",
     message: "Authentication is required or failed",
   },
   ACCESS_TOKEN_MISSING: {
     statusCode: 401,
-    error: "AccessTokenMissing",
+    name: "Unauthorized",
     message: "Access token is required but not provided",
   },
-  FORBIDDEN: {
-    statusCode: 403,
-    error: "Forbidden",
-    message: "You do not have permission to access this resource",
-  },
-  NOT_FOUND: {
-    statusCode: 404,
-    error: "NotFound",
-    message: "The requested resource was not found",
-  },
-  USER_NOT_FOUND: {
-    statusCode: 404,
-    error: "UserNotFound",
-    message: "User not found",
+  INVALID_ACCESS_TOKEN: {
+    statusCode: 401,
+    name: "Unauthorized",
+    message: "Access token is invalid or expired",
   },
   PASSWORD_INCORRECT: {
     statusCode: 401,
-    error: "PasswordIncorrect",
+    name: "Unauthorized",
     message: "Password is incorrect",
   },
   INVALID_CREDENTIALS: {
     statusCode: 401,
-    error: "InvalidCredentials",
+    name: "Unauthorized",
     message: "Invalid username or password",
   },
-  INVALID_ACCESS_TOKEN: {
-    statusCode: 401,
-    error: "InvalidAccessToken",
-    message: "Access token is invalid or expired",
+  FORBIDDEN: {
+    statusCode: 403,
+    name: "Forbidden",
+    message: "You do not have permission to access this resource",
+  },
+  NOT_FOUND: {
+    statusCode: 404,
+    name: "NotFound",
+    message: "The requested resource was not found",
+  },
+  USER_NOT_FOUND: {
+    statusCode: 404,
+    name: "NotFound",
+    message: "User not found",
   },
   METHOD_NOT_ALLOWED: {
     statusCode: 405,
-    error: "MethodNotAllowed",
+    name: "MethodNotAllowed",
     message: "The HTTP method is not allowed for this endpoint",
   },
   CONFLICT: {
     statusCode: 409,
-    error: "Conflict",
+    name: "Conflict",
     message: "Request conflicts with the current state of the resource",
   },
   UNSUPPORTED_MEDIA_TYPE: {
     statusCode: 415,
-    error: "UnsupportedMediaType",
+    name: "UnsupportedMediaType",
     message: "The media type of the request is not supported",
-  },
-  UNPROCESSABLE_ENTITY: {
-    statusCode: 422,
-    error: "UnprocessableEntity",
-    message: "The request was well-formed but contains semantic errors",
   },
   TOO_MANY_REQUESTS: {
     statusCode: 429,
-    error: "TooManyRequests",
+    name: "TooManyRequests",
     message: "Too many requests have been sent in a given amount of time",
   },
   INTERNAL_SERVER_ERROR: {
     statusCode: 500,
-    error: "InternalServerError",
+    name: "InternalServerError",
     message: "An unexpected error occurred on the server",
+  },
+  CLOUDINARY_UPLOAD_FAILED: {
+    statusCode: 500,
+    name: "InternalServerError",
+    message: "Failed to upload file to Cloudinary",
+  },
+  CLOUDINARY_DESTROY_FAILED: {
+    statusCode: 500,
+    name: "InternalServerError",
+    message: "Failed to delete from Cloudinary",
   },
   SERVICE_UNAVAILABLE: {
     statusCode: 503,
-    error: "ServiceUnavailable",
+    name: "ServiceUnavailable",
     message: "The service is temporarily unavailable",
   },
 } as const;
@@ -126,7 +136,7 @@ function getApiError(
 ): ApiError {
   return new ApiError(
     HttpError[errorType].statusCode,
-    HttpError[errorType].error,
+    HttpError[errorType].name,
     HttpError[errorType].message,
     rawError
   );

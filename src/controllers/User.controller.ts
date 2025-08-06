@@ -18,12 +18,12 @@ export default class UserController {
   }
 
   public readonly registerUser = async (
-    req: Request,
-    res: Response,
+    req: Request<object, object, CreateUserRequest>,
+    res: Response<ApiResponse<UserResponse>>,
     _: NextFunction
   ): Promise<void> => {
-    const user: CreateUserRequest = req.body;
-    const createdUser: UserResponse = await this.userService.registerUser(user);
+    const user = req.body;
+    const createdUser = await this.userService.registerUser(user);
 
     res
       .status(HttpSuccess.USER_REGISTERED.statusCode)
@@ -37,13 +37,12 @@ export default class UserController {
   };
 
   public readonly loginUser = async (
-    req: Request,
-    res: Response,
+    req: Request<object, object, AuthRequest>,
+    res: Response<ApiResponse<UserAuthResponse>>,
     _: NextFunction
   ): Promise<void> => {
-    const loginRequest: AuthRequest = req.body;
-    const authResponse: UserAuthResponse =
-      await this.userService.loginUser(loginRequest);
+    const loginRequest = req.body;
+    const authResponse = await this.userService.loginUser(loginRequest);
 
     res
       .status(200)

@@ -45,6 +45,9 @@ const envSchema = z.object({
   SUPER_ADMIN_USERNAME: z.string(),
   SUPER_ADMIN_PASSWORD: z.string(),
   SUPER_ADMIN_EMAIL: z.string().email(),
+  CLOUDINARY_API_SECRET: z.string(),
+  CLOUDINARY_API_KEY: z.string(),
+  CLOUDINARY_CLOUD_NAME: z.string(),
 });
 
 const envParsed = envSchema.safeParse(process.env);
