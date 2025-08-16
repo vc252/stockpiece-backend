@@ -11,11 +11,13 @@ import { ApiResponse } from "../common/ApiResponse.js";
 import { getApiError, HttpSuccess } from "../common/HttpResponse.js";
 import { UserAuthResponse } from "../common/types.common.js";
 import { crossSiteSafeCookieOptions } from "../config/cookie.config.js";
+import { BaseController } from "./BaseController.js";
 
-export default class UserController {
+export default class UserController extends BaseController {
   private readonly userService: UserService;
   constructor(container: Container) {
-    this.userService = container.resolve<UserService>("UserService");
+    super(container);
+    this.userService = this.resolve<UserService>("UserService");
   }
 
   public readonly registerUser = async (

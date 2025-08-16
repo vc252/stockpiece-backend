@@ -1,11 +1,14 @@
 import { Constructor } from "../common/types.common.js";
-import AdminController from "../controllers/Admin.controller.js";
-import UserController from "../controllers/User.controller.js";
+import AdminController from "../controllers/AdminController.js";
+import StockController from "../controllers/StockController.js";
+import UserController from "../controllers/UserController.js";
 import AdminRepository from "../repositories/admin.repositories.js";
+import StockRepository from "../repositories/StockRepository.js";
 import UserRepository from "../repositories/user.repositories.js";
 import AdminService from "../services/Admin.service.js";
 import FileUploadService from "../services/FileUploaderService.js";
 import ImageProcessingService from "../services/ImageProcessingService.js";
+import StockService from "../services/StockService.js";
 import UserService from "../services/User.service.js";
 
 export const ComponenetsDef: ComponentDefinition[] = [
@@ -30,6 +33,11 @@ export const ComponenetsDef: ComponentDefinition[] = [
     Class: FileUploadService,
     options: ["ImageProcessingService"],
   },
+  {
+    name: "StockService",
+    Class: StockService,
+    options: ["StockRepository"],
+  },
   //repositories
   {
     name: "UserRepository",
@@ -39,6 +47,11 @@ export const ComponenetsDef: ComponentDefinition[] = [
   {
     name: "AdminRepository",
     Class: AdminRepository,
+    options: [],
+  },
+  {
+    name: "StockRepository",
+    Class: StockRepository,
     options: [],
   },
   //controllers
@@ -52,6 +65,11 @@ export const ComponenetsDef: ComponentDefinition[] = [
     Class: AdminController,
     options: ["AdminService"],
   },
+  {
+    name: "StockController",
+    Class: StockController,
+    options: ["StockService"],
+  },
 ] as const;
 
 export type ComponentName =
@@ -59,9 +77,12 @@ export type ComponentName =
   | "AdminService"
   | "ImageProcessingService"
   | "FileUploadService"
+  | "StockService"
   | "UserRepository"
   | "AdminRepository"
+  | "StockRepository"
   | "UserController"
+  | "StockController"
   | "AdminController";
 
 export interface ComponentDefinition {

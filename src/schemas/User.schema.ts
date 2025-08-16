@@ -47,23 +47,6 @@ const authRequestSchema = userSchema
       .max(30, "maximum 30 characters allowed"),
   });
 
-const userResponseSchema = userSchema
-  .omit({
-    password: true,
-    refreshToken: true,
-  })
-  .extend({
-    _id: z.string(), // Convert ObjectId to string for API responses
-  });
-
-export const updateAvatarResponseSchema = z.object({
-  _id: z.string(),
-  username: z.string(),
-  email: z.string().email(),
-  avatar: z.string().url(),
-  updatedAt: z.date(),
-});
-
 // Type exports
 type User = z.infer<typeof userSchema>;
 type CreateUserRequest = z.infer<typeof createUserRequestSchema>;
@@ -71,7 +54,10 @@ type AuthRequest = z.infer<typeof authRequestSchema>;
 type UserResponse = Omit<User, "password" | "refreshToken" | "_id"> & {
   _id: string;
 };
-export type UpdateAvatarResponse = z.infer<typeof updateAvatarResponseSchema>;
+type UpdateAvatarResponse = Pick<
+  UserResponse,
+  "_id" | "username" | "email" | "avatar" | "updatedAt"
+>;
 
 export {
   User,
@@ -80,6 +66,6 @@ export {
   CreateUserRequest,
   authRequestSchema,
   AuthRequest,
-  userResponseSchema,
   UserResponse,
+  UpdateAvatarResponse,
 };

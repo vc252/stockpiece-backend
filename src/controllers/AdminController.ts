@@ -10,12 +10,14 @@ import {
 import { HttpSuccess } from "../common/HttpResponse.js";
 import { crossSiteSafeCookieOptions } from "../config/cookie.config.js";
 import { AuthRequest } from "../schemas/User.schema.js";
+import { BaseController } from "./BaseController.js";
 
-export default class AdminController {
+export default class AdminController extends BaseController {
   private readonly adminService: AdminService;
 
   constructor(container: Container) {
-    this.adminService = container.resolve<AdminService>("AdminService");
+    super(container);
+    this.adminService = this.resolve<AdminService>("AdminService");
   }
 
   public readonly createAdmin = async (

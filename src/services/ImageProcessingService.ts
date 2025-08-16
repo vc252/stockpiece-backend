@@ -3,9 +3,12 @@ import path from "node:path";
 import { logger } from "../utils/logger.js";
 import { getApiError } from "../common/HttpResponse.js";
 import Container from "../container/Container.js";
+import { BaseService } from "./BaseService.js";
 
-export default class ImageProcessingService {
-  constructor(_container: Container) {}
+export default class ImageProcessingService extends BaseService {
+  constructor(container: Container) {
+    super(container);
+  }
 
   public readonly processImage = async (
     inputPath: string,

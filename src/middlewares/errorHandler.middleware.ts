@@ -18,6 +18,11 @@ export const errorHandler = (
     error = handleMulterError(error);
   }
 
+  // Handle MongoDB errors
+  if (error.name === "MongoError" || error.name === "MongoServerError") {
+    error = handleMongoError(error);
+  }
+
   // Default to 500
   let statusCode: number = HttpError.INTERNAL_SERVER_ERROR.statusCode;
   let message: string = HttpError.INTERNAL_SERVER_ERROR.message;
@@ -66,6 +71,32 @@ export const errorHandler = (
   );
 
   res.status(statusCode).json(errorResponse);
+};
+
+// Helper function to convert MongoDB errors to ApiError
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const handleMongoError = (error: any): ApiError => {
+  if (error.code === 11000) {
+    // Duplicate key error
+    const duplicateField = Object.keys(error.keyPattern || {})[0] || "field";
+    return getApiError(
+      "CONFLICT",
+      error,
+      `${duplicateField} value already exists`
+    );
+  }
+
+  if (error.code === 11001) {
+    // Bulk write duplicate key error
+    return getApiError(
+      "CONFLICT",
+      error,
+      "Duplicate value error in bulk operation"
+    );
+  }
+
+  // Other MongoDB errors
+  return getApiError("INTERNAL_SERVER_ERROR", error);
 };
 
 // Helper function to convert Multer errors to ApiError

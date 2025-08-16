@@ -6,13 +6,15 @@ import { logger } from "../utils/logger.js";
 import fs from "node:fs";
 import { getApiError } from "../common/HttpResponse.js";
 import { extractPublicId } from "cloudinary-build-url";
+import { BaseService } from "./BaseService.js";
 
-export default class FileUploadService {
+export default class FileUploadService extends BaseService {
   private readonly imageProcessingService: ImageProcessingService;
   private readonly defaultAvatarPublicId = "luffy_processed_wm5fus";
   private readonly defaultAvatarUrl: string;
 
   constructor(container: Container) {
+    super(container);
     cloudinary.config({
       cloud_name: env.CLOUDINARY_CLOUD_NAME,
       api_key: env.CLOUDINARY_API_KEY,
@@ -24,7 +26,7 @@ export default class FileUploadService {
       secure: true,
     });
 
-    this.imageProcessingService = container.resolve("ImageProcessingService");
+    this.imageProcessingService = this.resolve("ImageProcessingService");
   }
 
   public readonly getDefaultAvatarUrl = (): string => {

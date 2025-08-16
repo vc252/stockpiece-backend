@@ -16,6 +16,11 @@ const HttpError = {
     name: "BadRequest",
     message: "Invalid Cloudinary URL provided",
   },
+  FILE_REQUIRED: {
+    statusCode: 400,
+    name: "BadRequest",
+    message: "File is required but not provided",
+  },
   UNAUTHORIZED: {
     statusCode: 401,
     name: "Unauthorized",
@@ -132,12 +137,13 @@ const HttpSuccess = {
 function getApiError(
   errorType: keyof typeof HttpError,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  rawError?: any
+  rawError?: any,
+  message?: string
 ): ApiError {
   return new ApiError(
     HttpError[errorType].statusCode,
     HttpError[errorType].name,
-    HttpError[errorType].message,
+    message || HttpError[errorType].message,
     rawError
   );
 }

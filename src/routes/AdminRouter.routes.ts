@@ -7,17 +7,16 @@ import {
   checkSuperAdmin,
 } from "../middlewares/auth.middleware.js";
 import Container from "../container/Container.js";
-import AdminController from "../controllers/Admin.controller.js";
+import AdminController from "../controllers/AdminController.js";
 import { authRequestSchema } from "../schemas/User.schema.js";
 
 export default class AdminRouter extends CommonRoutesConfig {
   private readonly adminController: AdminController;
 
   constructor(name: string, basePath: string, container: Container) {
-    super(name, basePath);
+    super(name, basePath, container);
 
-    this.adminController =
-      container.resolve<AdminController>("AdminController");
+    this.adminController = this.resolve<AdminController>("AdminController");
   }
 
   public configurRoutes(): void {

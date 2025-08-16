@@ -15,13 +15,14 @@ import env from "../config/env.config.js";
 import jwt from "jsonwebtoken";
 import { StringValue } from "ms";
 import { roles } from "../common/constants.common.js";
+import { BaseService } from "./BaseService.js";
 
-export default class AdminService {
+export default class AdminService extends BaseService {
   private readonly adminRepository: AdminRepository;
 
   constructor(container: Container) {
-    this.adminRepository =
-      container.resolve<AdminRepository>("AdminRepository");
+    super(container);
+    this.adminRepository = this.resolve<AdminRepository>("AdminRepository");
   }
 
   //this function won't be used by an Api

@@ -6,19 +6,17 @@ import {
 import asyncHandler from "../utils/asyncHandler.util.js";
 import validate from "../middlewares/validation.middleware.js";
 import Container from "../container/Container.js";
-import UserController from "../controllers/User.controller.js";
-import { logger } from "../utils/logger.js";
+import UserController from "../controllers/UserController.js";
 import { verifyUserJwt } from "../middlewares/auth.middleware.js";
 import { ImageUploader } from "../middlewares/multer.middleware.js";
 
 export default class UserRouter extends CommonRoutesConfig {
   private readonly userController: UserController;
 
-  constructor(name: string, basePath: string, Container: Container) {
-    super(name, basePath);
+  constructor(name: string, basePath: string, container: Container) {
+    super(name, basePath, container);
 
-    this.userController = Container.resolve<UserController>("UserController");
-    logger.debug(JSON.stringify(this.userController));
+    this.userController = this.resolve<UserController>("UserController");
   }
 
   public configurRoutes(): void {
