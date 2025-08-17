@@ -60,9 +60,16 @@ export default class AdminService extends BaseService {
   public readonly loginAdmin = async (
     loginRequest: AuthRequest
   ): Promise<AdminAuthResponse> => {
-    const admin = await this.adminRepository.findByUsername(
-      loginRequest.username
-    );
+    let admin;
+
+    if (loginRequest.identifier.includes("@")) {
+      //then it might be an email
+      admin = await this.adminRepository.findByEmail(loginRequest.identifier);
+    } else {
+      admin = await this.adminRepository.findByUsername(
+        loginRequest.identifier
+      );
+    }
 
     if (!admin) {
       throw getApiError("INVALID_CREDENTIALS");

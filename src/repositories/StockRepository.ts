@@ -56,13 +56,20 @@ export default class StockRepository {
   public readonly toggleStockStatus = async (
     id: string
   ): Promise<Stock | null> => {
-    const toggledStock = await StockModel.findByIdAndUpdate(id, {
-      $bit: {
-        isActive: {
-          xor: 1,
+    const toggledStock = await StockModel.findByIdAndUpdate(
+      id,
+      [
+        {
+          $set: {
+            isActive: { $not: "$isActive" },
+          },
         },
-      },
-    });
+      ],
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
 
     if (!toggledStock) {
       return null;
@@ -82,5 +89,33 @@ export default class StockRepository {
     }
 
     return parseDbResponseOrThrow<Stock>(stockSchema, deletedStock);
+  };
+
+  public readonly adjustStockQuantity = async (
+    id: string,
+    amount: number // Can be positive (increment) or negative (decrement)
+  ): Promise<Stock | null> => {
+    // If decrementing, ensure we don't go below 0
+    const query =
+      amount < 0
+        ? { _id: id, quantity: { $gte: Math.abs(amount) } }
+        : { _id: id };
+
+    const updatedStock = await StockModel.findOneAndUpdate(
+      query,
+      {
+        $inc: { quantity: amount },
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    ).lean();
+
+    if (!updatedStock) {
+      return null;
+    }
+
+    return parseDbResponseOrThrow<Stock>(stockSchema, updatedStock);
   };
 }

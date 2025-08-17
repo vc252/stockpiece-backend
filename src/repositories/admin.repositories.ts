@@ -43,6 +43,26 @@ export default class AdminRepository {
       })
       .lean();
 
+    if (!admin) {
+      return null;
+    }
+
+    return parseDbResponseOrThrow<Admin>(adminSchema, admin);
+  };
+
+  public readonly findByEmail = async (
+    email: string
+  ): Promise<Admin | null> => {
+    const admin = await adminModel
+      .findOne({
+        email,
+      })
+      .lean();
+
+    if (!admin) {
+      return null;
+    }
+
     return parseDbResponseOrThrow<Admin>(adminSchema, admin);
   };
 }
