@@ -44,6 +44,7 @@
     "argon2": "^0.43.0",
     "cloudinary": "^2.7.0",
     "cloudinary-build-url": "^0.2.4",
+    "compression": "^1.8.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "debug": "^4.4.1",
@@ -59,6 +60,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.27.0",
+    "@types/compression": "^1.8.1",
     "@types/cookie-parser": "^1.4.9",
     "@types/cors": "^2.8.18",
     "@types/debug": "^4.1.12",

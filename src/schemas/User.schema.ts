@@ -39,17 +39,10 @@ const createUserRequestSchema = userSchema
     couponCode: z.string().optional(),
   });
 
-const authRequestSchema = userSchema
-  .pick({
-    username: true,
-  })
-  .extend({
-    password: z
-      .string()
-      .trim()
-      .min(1, "minimum 1 character required")
-      .max(30, "maximum 30 characters allowed"),
-  });
+const authRequestSchema = z.object({
+  identifier: z.string().trim(),
+  password: z.string().trim(),
+});
 
 // Type exports
 type User = z.infer<typeof userSchema>;

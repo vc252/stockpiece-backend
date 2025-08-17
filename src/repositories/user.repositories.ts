@@ -14,9 +14,21 @@ export default class UserRepository {
     username: string
   ): Promise<User | null> => {
     const user = await UserModel.findOne({ username }).lean();
+
     if (!user) {
       return null;
     }
+
+    return parseDbResponseOrThrow<User>(userSchema, user);
+  };
+
+  public readonly findByEmail = async (email: string): Promise<User | null> => {
+    const user = await UserModel.findOne({ email }).lean();
+
+    if (!user) {
+      return null;
+    }
+
     return parseDbResponseOrThrow<User>(userSchema, user);
   };
 

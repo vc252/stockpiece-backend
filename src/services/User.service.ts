@@ -40,13 +40,18 @@ export default class UserService {
     return userResponse;
   };
 
+  //we can login either via mail or username
   public readonly loginUser = async (
     loginRequest: AuthRequest
   ): Promise<UserAuthResponse> => {
     //first we need to find the user and then verify its password
-    const user = await this.userRepository.findByUsername(
-      loginRequest.username
-    );
+    let user;
+    if (loginRequest.identifier.includes("@")) {
+      //then it might be an email
+      user = await this.userRepository.findByEmail(loginRequest.identifier);
+    } else {
+      user = await this.userRepository.findByUsername(loginRequest.identifier);
+    }
 
     if (!user) {
       throw getApiError("INVALID_CREDENTIALS");
