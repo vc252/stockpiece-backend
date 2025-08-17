@@ -8,14 +8,18 @@ const userSchema = z.object({
     .string()
     .trim()
     .min(1, "minimum 1 character required")
-    .max(30, "maximum 30 characters allowed"),
+    .max(30, "maximum 30 characters allowed")
+    .regex(
+      /^[A-Za-z0-9._]+$/,
+      "Only letters, numbers, dot and underscore allowed"
+    ),
   email: z.string().email(),
   password: z.string().trim(),
   refreshToken: z.string().trim().nullable(),
-  hasUsedReferral: z.boolean(),
+  hasUsedReferral: z.coerce.boolean(),
   lastLogin: z.date().nullable(),
   avatar: z.string().trim().url("Avatar must be a valid URL").nullable(),
-  accountValue: z.number(),
+  accountValue: z.coerce.number(),
   createdAt: z.date(),
   updatedAt: z.date(),
 });

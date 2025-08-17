@@ -6,6 +6,7 @@ import Container from "./container/Container.js";
 import { registerComponents } from "./container/setUpComponent.container.js";
 import { ComponenetsDef } from "./config/ComponentsDef.js";
 import cookieParser from "cookie-parser";
+import { errorHandler } from "./middlewares/errorHandler.middleware.js";
 
 let app: express.Application = express();
 
@@ -25,5 +26,7 @@ app = registerRoutes(app, routesDefs, "/api/v2", container);
 app.get("/", (req, res) => {
   res.send("hello");
 });
+
+app.use(errorHandler);
 
 export default app;

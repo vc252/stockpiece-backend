@@ -12,11 +12,11 @@ const stockSchema = z.object({
   name: z.string().min(1, "Name required").max(50),
   displayName: z.string().min(1, "Display name required").max(70),
   symbol: symbolSchema,
-  currentPrice: z.number().positive("Price must be > 0"),
+  currentPrice: z.coerce.number().positive("Price must be > 0"),
   imageURL: z.string().url("Invalid image URL"),
-  quantity: z.number().int().nonnegative("Quantity must be >= 0"),
+  quantity: z.coerce.number().int().nonnegative("Quantity must be >= 0"),
   description: z.string().max(500).optional(),
-  isActive: z.boolean(),
+  isActive: z.coerce.boolean(),
   createdAt: z.date(),
   updatedAt: z.date(),
 });
@@ -34,6 +34,27 @@ const createStockRequestSchema = stockSchema
     isActive: z.boolean().optional(),
   });
 
+const updateStockPriceSchema = stockSchema.pick({
+  currentPrice: true,
+});
+
+const updateStockQuantitySchema = stockSchema.pick({
+  quantity: true,
+});
+
+const updateStockDescriptionSchema = z.object({
+  description: z.string().max(500),
+});
+
+const updateStockStatusSchema = stockSchema.pick({
+  isActive: true,
+});
+
+type UpdateStockPrice = z.infer<typeof updateStockPriceSchema>;
+type UpdateStockQuantity = z.infer<typeof updateStockQuantitySchema>;
+type UpdateStockDescription = z.infer<typeof updateStockDescriptionSchema>;
+type UpdateStockStatus = z.infer<typeof updateStockStatusSchema>;
+
 type Stock = z.infer<typeof stockSchema>;
 type CreateStockRequest = z.infer<typeof createStockRequestSchema>;
 type StockResponse = Omit<Stock, "_id"> & {
@@ -46,8 +67,16 @@ type StockData = CreateStockRequest & {
 export {
   stockSchema,
   createStockRequestSchema,
+  updateStockPriceSchema,
+  updateStockQuantitySchema,
+  updateStockDescriptionSchema,
+  updateStockStatusSchema,
   Stock,
   CreateStockRequest,
   StockResponse,
   StockData,
+  UpdateStockPrice,
+  UpdateStockQuantity,
+  UpdateStockDescription,
+  UpdateStockStatus,
 };

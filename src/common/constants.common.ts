@@ -13,7 +13,7 @@ const collections = {
   USERS: "users",
 } as const;
 
-const UPLOAD_PATH = join(__dirname, "../public/temp");
+const UPLOAD_PATH = join(__dirname, "../../public/temp");
 const MAX_FILE_SIZE = 1024 * 1024 * 5; // 5MB
 const ALLOWED_EXTENSIONS = /\.(jpg|jpeg|png|gif|webp)$/i;
 const ALLOWED_MIME_TYPES = [
@@ -25,7 +25,7 @@ const ALLOWED_MIME_TYPES = [
 
 const permissions = {
   MARKET_CONTROL: "market_control", // can open/close market and toggle next chapter release
-  CHANGE_STOCK_PRICE: "change_stock_price",
+  UPDATE_STOCK: "update_stock",
   GENERATE_COUPON: "generate_coupon",
   VIEW_FUTURE_PRICE: "view_future_price",
   VIEW_USER_INFO: "view_user_info",

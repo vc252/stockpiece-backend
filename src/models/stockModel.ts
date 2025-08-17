@@ -26,6 +26,7 @@ const stockSchema = new mongoose.Schema(
     symbol: {
       type: String,
       required: true,
+      uppercase: true,
       unique: true,
     },
     quantity: {

@@ -56,6 +56,11 @@ const HttpError = {
     name: "NotFound",
     message: "The requested resource was not found",
   },
+  STOCK_NOT_FOUND: {
+    statusCode: 404,
+    name: "NotFound",
+    message: "Stock not found",
+  },
   USER_NOT_FOUND: {
     statusCode: 404,
     name: "NotFound",

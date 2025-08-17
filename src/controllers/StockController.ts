@@ -3,7 +3,13 @@ import Container from "../container/Container.js";
 import { BaseController } from "./BaseController.js";
 import StockService from "../services/StockService.js";
 import { ApiResponse } from "../common/ApiResponse.js";
-import { CreateStockRequest, StockResponse } from "../schemas/stockSchema.js";
+import {
+  CreateStockRequest,
+  StockResponse,
+  UpdateStockDescription,
+  UpdateStockPrice,
+  UpdateStockQuantity,
+} from "../schemas/stockSchema.js";
 import { HttpSuccess, getApiError } from "../common/HttpResponse.js";
 
 export default class StockController extends BaseController {
@@ -38,6 +44,147 @@ export default class StockController extends BaseController {
           HttpSuccess.CREATED.statusCode,
           "Stock created successfully",
           createdStock
+        )
+      );
+  };
+
+  public readonly updateStockPrice = async (
+    req: Request<{ id?: string }, object, UpdateStockPrice>,
+    res: Response<ApiResponse<StockResponse>>,
+    _: NextFunction
+  ): Promise<void> => {
+    const { id } = req.params;
+    const priceData = req.body;
+
+    if (!id) {
+      throw getApiError("BAD_REQUEST");
+    }
+
+    const updatedStock = await this.stockService.updateStockPrice(
+      id,
+      priceData.currentPrice
+    );
+
+    res
+      .status(HttpSuccess.OK.statusCode)
+      .json(
+        new ApiResponse<StockResponse>(
+          HttpSuccess.OK.statusCode,
+          "Stock price updated successfully",
+          updatedStock
+        )
+      );
+  };
+
+  public readonly updateStockQuantity = async (
+    req: Request<{ id?: string }, object, UpdateStockQuantity>,
+    res: Response<ApiResponse<StockResponse>>,
+    _: NextFunction
+  ): Promise<void> => {
+    const { id } = req.params;
+    const quantityData = req.body;
+
+    if (!id) {
+      throw getApiError("BAD_REQUEST");
+    }
+
+    const updatedStock = await this.stockService.updateStockQuantity(
+      id,
+      quantityData.quantity
+    );
+
+    res
+      .status(HttpSuccess.OK.statusCode)
+      .json(
+        new ApiResponse<StockResponse>(
+          HttpSuccess.OK.statusCode,
+          "Stock quantity updated successfully",
+          updatedStock
+        )
+      );
+  };
+
+  public readonly updateStockDescription = async (
+    req: Request<{ id?: string }, object, UpdateStockDescription>,
+    res: Response<ApiResponse<StockResponse>>,
+    _: NextFunction
+  ): Promise<void> => {
+    const { id } = req.params;
+    const descriptionData = req.body;
+
+    if (!id) {
+      throw getApiError("BAD_REQUEST");
+    }
+
+    const updatedStock = await this.stockService.updateStockDescription(
+      id,
+      descriptionData.description
+    );
+
+    res
+      .status(HttpSuccess.OK.statusCode)
+      .json(
+        new ApiResponse<StockResponse>(
+          HttpSuccess.OK.statusCode,
+          "Stock description updated successfully",
+          updatedStock
+        )
+      );
+  };
+
+  public readonly toggleStockStatus = async (
+    req: Request<{ id?: string }, object, object>,
+    res: Response<ApiResponse<StockResponse>>,
+    _: NextFunction
+  ): Promise<void> => {
+    const { id } = req.params;
+
+    if (!id) {
+      throw getApiError("BAD_REQUEST");
+    }
+
+    const updatedStock = await this.stockService.toggleStockStatus(id);
+
+    res
+      .status(HttpSuccess.OK.statusCode)
+      .json(
+        new ApiResponse<StockResponse>(
+          HttpSuccess.OK.statusCode,
+          "Stock status updated successfully",
+          updatedStock
+        )
+      );
+  };
+
+  public readonly updateStockImage = async (
+    req: Request<{ id?: string }>,
+    res: Response<ApiResponse<StockResponse>>,
+    _: NextFunction
+  ): Promise<void> => {
+    const { id } = req.params;
+
+    if (!id) {
+      throw getApiError("BAD_REQUEST");
+    }
+
+    const imageFile = req.file?.path;
+
+    if (!imageFile) {
+      throw getApiError("FILE_REQUIRED");
+    }
+
+    const updatedStock = await this.stockService.updateStockImage(
+      id,
+      imageFile
+    );
+
+    res
+      .status(HttpSuccess.OK.statusCode)
+      .json(
+        new ApiResponse<StockResponse>(
+          HttpSuccess.OK.statusCode,
+          "Stock image updated successfully",
+          updatedStock
         )
       );
   };

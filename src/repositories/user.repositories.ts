@@ -32,9 +32,16 @@ export default class UserRepository {
     _id: string,
     updateBody: Partial<User>
   ): Promise<User | null> => {
-    const user = await UserModel.findByIdAndUpdate(_id, updateBody, {
-      new: true,
-    });
+    const user = await UserModel.findByIdAndUpdate(
+      _id,
+      {
+        $set: updateBody,
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
     if (!user) {
       return null;
     }

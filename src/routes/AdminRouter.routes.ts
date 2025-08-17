@@ -24,9 +24,9 @@ export default class AdminRouter extends CommonRoutesConfig {
     this.router
       .route("/")
       .post(
-        validate(creatNonSuperAdminRequestSchema),
         verifyAdminJwt,
         checkSuperAdmin,
+        validate(creatNonSuperAdminRequestSchema),
         asyncHandler(this.adminController.createAdmin)
       );
 

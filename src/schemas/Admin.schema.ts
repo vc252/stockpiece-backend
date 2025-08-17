@@ -16,7 +16,7 @@ const adminSchema = z.object({
   email: z.string().email(),
   password: z.string().trim(),
   permissions: z.array(permissionSchema),
-  isSuperAdmin: z.boolean(),
+  isSuperAdmin: z.coerce.boolean(),
   createdAt: z.date(),
   updatedAt: z.date(),
 });

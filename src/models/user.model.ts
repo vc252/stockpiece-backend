@@ -14,6 +14,10 @@ const userSchema = new mongoose.Schema<User>(
       trim: true,
       minlength: [1, "minimum 1 character required"],
       maxLength: [30, "maximum 30 characters allowed"],
+      match: [
+        /^[A-Za-z0-9._]+$/,
+        "Only letters, numbers, dot and underscore allowed",
+      ],
     },
     password: {
       type: String,

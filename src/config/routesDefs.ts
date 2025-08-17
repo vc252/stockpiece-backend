@@ -1,4 +1,5 @@
 import AdminRouter from "../routes/AdminRouter.routes.js";
+import { StockRouter } from "../routes/StockRouter.js";
 import UserRouter from "../routes/UserRouter.routes.js";
 
 export const routesDefs = [
@@ -13,5 +14,10 @@ export const routesDefs = [
     name: "adminRouter",
     basePath: "admin",
     RouterClass: AdminRouter,
+  },
+  {
+    name: "stockRouter",
+    basePath: "stock",
+    RouterClass: StockRouter,
   },
 ];

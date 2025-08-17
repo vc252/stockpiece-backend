@@ -1,6 +1,7 @@
 import { ZodSchema } from "zod";
 import { Request, Response, NextFunction } from "express";
 import { parseRequestOrThrow } from "../utils/parseOrThrow.util.js";
+import { logger } from "../utils/logger.js";
 
 const validate =
   (schema: ZodSchema<unknown>) =>
@@ -10,6 +11,7 @@ const validate =
       req.body = parseRequestOrThrow<unknown>(schema, req.body);
       next();
     } catch (err) {
+      logger.debug("validation error: ", err);
       next(err);
     }
   };

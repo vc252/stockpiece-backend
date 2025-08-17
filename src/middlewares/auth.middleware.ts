@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import env from "../config/env.config.js";
 import { UserJwtPayload, AdminJwtPayload } from "../common/types.common.js";
 import { logger } from "../utils/logger.js";
+import { PermissionType } from "../common/constants.common.js";
 
 const verifyUserJwt = async (
   req: Request,
@@ -50,7 +51,7 @@ const verifyAdminJwt = async (
   }
 };
 
-const checkPermissions = (requiredPermissions: string[]) => {
+const checkPermissions = (requiredPermissions: PermissionType[]) => {
   return async (
     req: Request,
     res: Response,
