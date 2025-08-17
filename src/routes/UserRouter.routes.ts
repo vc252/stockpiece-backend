@@ -9,14 +9,18 @@ import Container from "../container/Container.js";
 import UserController from "../controllers/UserController.js";
 import { verifyUserJwt } from "../middlewares/auth.middleware.js";
 import { ImageUploader } from "../middlewares/multer.middleware.js";
+import { restrictStocksByRole } from "../middlewares/filterStockFilter.js";
+import StockController from "../controllers/StockController.js";
 
 export default class UserRouter extends CommonRoutesConfig {
   private readonly userController: UserController;
+  private readonly stockController: StockController;
 
   constructor(name: string, basePath: string, container: Container) {
     super(name, basePath, container);
 
     this.userController = this.resolve<UserController>("UserController");
+    this.stockController = this.resolve<StockController>("StockController");
   }
 
   public configurRoutes(): void {
@@ -40,6 +44,14 @@ export default class UserRouter extends CommonRoutesConfig {
         verifyUserJwt,
         ImageUploader.single("avatar"),
         asyncHandler(this.userController.updateAvatar)
+      );
+
+    this.router
+      .route("/getAllStocks")
+      .get(
+        verifyUserJwt,
+        restrictStocksByRole,
+        asyncHandler(this.stockController.getAllStocks)
       );
   }
 }

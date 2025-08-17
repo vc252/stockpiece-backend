@@ -5,6 +5,7 @@ import StockService from "../services/StockService.js";
 import { ApiResponse } from "../common/ApiResponse.js";
 import {
   CreateStockRequest,
+  GetStocksQuery,
   StockResponse,
   UpdateStockDescription,
   UpdateStockPrice,
@@ -44,6 +45,26 @@ export default class StockController extends BaseController {
           HttpSuccess.CREATED.statusCode,
           "Stock created successfully",
           createdStock
+        )
+      );
+  };
+
+  public readonly getAllStocks = async (
+    req: Request<object, object, object, unknown>,
+    res: Response<ApiResponse<StockResponse[]>>,
+    _: NextFunction
+  ): Promise<void> => {
+    const query = req.query as GetStocksQuery;
+
+    const stocks = await this.stockService.getAllStocks(query);
+
+    res
+      .status(HttpSuccess.OK.statusCode)
+      .json(
+        new ApiResponse<StockResponse[]>(
+          HttpSuccess.OK.statusCode,
+          "Stocks fetched successfully",
+          stocks
         )
       );
   };

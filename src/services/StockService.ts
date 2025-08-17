@@ -2,7 +2,11 @@ import { ApiError } from "../common/ApiError.js";
 import { getApiError } from "../common/HttpResponse.js";
 import Container from "../container/Container.js";
 import StockRepository from "../repositories/StockRepository.js";
-import { CreateStockRequest, StockResponse } from "../schemas/stockSchema.js";
+import {
+  CreateStockRequest,
+  GetStocksQuery,
+  StockResponse,
+} from "../schemas/stockSchema.js";
 import { logger } from "../utils/logger.js";
 import { BaseService } from "./BaseService.js";
 import FileUploadService from "./FileUploaderService.js";
@@ -215,6 +219,28 @@ export default class StockService extends BaseService {
         "INTERNAL_SERVER_ERROR",
         error,
         "Failed to update stock description"
+      );
+    }
+  };
+
+  public readonly getAllStocks = async (
+    query: GetStocksQuery
+  ): Promise<StockResponse[]> => {
+    try {
+      const stocks = await this.stockRepository.getAllStocks(query);
+
+      return stocks.map((stock) => ({
+        ...stock,
+        _id: stock._id.toString(),
+      }));
+    } catch (error) {
+      if (error instanceof ApiError) {
+        throw error;
+      }
+      throw getApiError(
+        "INTERNAL_SERVER_ERROR",
+        error,
+        "Failed to fetch stocks"
       );
     }
   };

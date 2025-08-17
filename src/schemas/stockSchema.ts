@@ -50,6 +50,17 @@ const updateStockStatusSchema = stockSchema.pick({
   isActive: true,
 });
 
+const getStocksQuerySchema = z.object({
+  isActive: z.coerce.boolean(),
+  sortBy: z
+    .enum(["name", "symbol", "currentPrice", "quantity", "createdAt"])
+    .optional()
+    .default("name"),
+  sortOrder: z.enum(["asc", "desc"]).optional().default("desc"),
+});
+
+type GetStocksQuery = z.infer<typeof getStocksQuerySchema>;
+
 type UpdateStockPrice = z.infer<typeof updateStockPriceSchema>;
 type UpdateStockQuantity = z.infer<typeof updateStockQuantitySchema>;
 type UpdateStockDescription = z.infer<typeof updateStockDescriptionSchema>;
@@ -67,6 +78,8 @@ type StockData = CreateStockRequest & {
 export {
   stockSchema,
   createStockRequestSchema,
+  getStocksQuerySchema,
+  GetStocksQuery,
   updateStockPriceSchema,
   updateStockQuantitySchema,
   updateStockDescriptionSchema,

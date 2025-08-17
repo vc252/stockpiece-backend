@@ -39,7 +39,7 @@ export default class AdminController extends BaseController {
   };
 
   public readonly loginAdmin = async (
-    req: Request<object, object, AuthRequest, object>,
+    req: Request<object, object, AuthRequest>,
     res: Response,
     _: NextFunction
   ): Promise<void> => {

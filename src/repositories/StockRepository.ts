@@ -1,5 +1,10 @@
 import StockModel from "../models/stockModel.js";
-import { Stock, StockData, stockSchema } from "../schemas/stockSchema.js";
+import {
+  GetStocksQuery,
+  Stock,
+  StockData,
+  stockSchema,
+} from "../schemas/stockSchema.js";
 import { parseDbResponseOrThrow } from "../utils/parseOrThrow.util.js";
 
 export default class StockRepository {
@@ -117,5 +122,22 @@ export default class StockRepository {
     }
 
     return parseDbResponseOrThrow<Stock>(stockSchema, updatedStock);
+  };
+
+  public readonly getAllStocks = async (
+    query: GetStocksQuery
+  ): Promise<Stock[]> => {
+    const { isActive = true, sortBy = "createdAt", sortOrder = "desc" } = query;
+
+    const stocks = await StockModel.find({ isActive })
+      .sort({
+        [sortBy]: sortOrder,
+      })
+      .lean();
+
+    // Parse and validate each stock
+    return stocks.map((stock) =>
+      parseDbResponseOrThrow<Stock>(stockSchema, stock)
+    );
   };
 }
