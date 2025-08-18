@@ -55,7 +55,6 @@ export default class StockController extends BaseController {
     _: NextFunction
   ): Promise<void> => {
     const query = req.query as GetStocksQuery;
-
     const stocks = await this.stockService.getAllStocks(query);
 
     res
@@ -74,13 +73,8 @@ export default class StockController extends BaseController {
     res: Response<ApiResponse<StockResponse>>,
     _: NextFunction
   ): Promise<void> => {
-    const { id } = req.params;
+    const id = req.params as string;
     const priceData = req.body;
-
-    if (!id) {
-      throw getApiError("BAD_REQUEST");
-    }
-
     const updatedStock = await this.stockService.updateStockPrice(
       id,
       priceData.currentPrice
@@ -102,13 +96,8 @@ export default class StockController extends BaseController {
     res: Response<ApiResponse<StockResponse>>,
     _: NextFunction
   ): Promise<void> => {
-    const { id } = req.params;
+    const id = req.params as string;
     const quantityData = req.body;
-
-    if (!id) {
-      throw getApiError("BAD_REQUEST");
-    }
-
     const updatedStock = await this.stockService.updateStockQuantity(
       id,
       quantityData.quantity
@@ -130,13 +119,8 @@ export default class StockController extends BaseController {
     res: Response<ApiResponse<StockResponse>>,
     _: NextFunction
   ): Promise<void> => {
-    const { id } = req.params;
+    const id = req.params as string;
     const descriptionData = req.body;
-
-    if (!id) {
-      throw getApiError("BAD_REQUEST");
-    }
-
     const updatedStock = await this.stockService.updateStockDescription(
       id,
       descriptionData.description
@@ -158,12 +142,7 @@ export default class StockController extends BaseController {
     res: Response<ApiResponse<StockResponse>>,
     _: NextFunction
   ): Promise<void> => {
-    const { id } = req.params;
-
-    if (!id) {
-      throw getApiError("BAD_REQUEST");
-    }
-
+    const id = req.params.id as string;
     const updatedStock = await this.stockService.toggleStockStatus(id);
 
     res
@@ -182,12 +161,7 @@ export default class StockController extends BaseController {
     res: Response<ApiResponse<StockResponse>>,
     _: NextFunction
   ): Promise<void> => {
-    const { id } = req.params;
-
-    if (!id) {
-      throw getApiError("BAD_REQUEST");
-    }
-
+    const id = req.params.id as string;
     const imageFile = req.file?.path;
 
     if (!imageFile) {

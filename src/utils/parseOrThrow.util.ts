@@ -3,13 +3,17 @@ import { HttpError } from "../common/HttpResponse.js";
 import { ApiError } from "../common/ApiError.js";
 import { logger } from "./logger.js";
 
-function parseRequestOrThrow<T>(schema: ZodSchema, data: unknown): T {
+function parseRequestOrThrow<T>(
+  schema: ZodSchema,
+  data: unknown,
+  type: "body" | "query" | "params"
+): T {
   const parsed = schema.safeParse(data);
   if (!parsed.success) {
     throw new ApiError(
       HttpError.VALIDATION_ERROR.statusCode,
       HttpError.VALIDATION_ERROR.name,
-      "Invalid request body",
+      `Invalid request ${type}`,
       parsed.error.format()
     );
   }

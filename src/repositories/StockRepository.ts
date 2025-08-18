@@ -1,10 +1,6 @@
+import { SortOrder } from "mongoose";
 import StockModel from "../models/stockModel.js";
-import {
-  GetStocksQuery,
-  Stock,
-  StockData,
-  stockSchema,
-} from "../schemas/stockSchema.js";
+import { Stock, StockData, stockSchema } from "../schemas/stockSchema.js";
 import { parseDbResponseOrThrow } from "../utils/parseOrThrow.util.js";
 
 export default class StockRepository {
@@ -125,10 +121,10 @@ export default class StockRepository {
   };
 
   public readonly getAllStocks = async (
-    query: GetStocksQuery
+    isActive: boolean,
+    sortBy: string,
+    sortOrder: SortOrder
   ): Promise<Stock[]> => {
-    const { isActive = true, sortBy = "createdAt", sortOrder = "desc" } = query;
-
     const stocks = await StockModel.find({ isActive })
       .sort({
         [sortBy]: sortOrder,

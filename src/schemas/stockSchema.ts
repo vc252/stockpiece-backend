@@ -34,6 +34,16 @@ const createStockRequestSchema = stockSchema
     isActive: z.boolean().optional(),
   });
 
+const objectIdSchema = z
+  .string()
+  .refine((val) => mongoose.Types.ObjectId.isValid(val), {
+    message: "Invalid ObjectId",
+  });
+
+const IdParamSchema = z.object({
+  id: objectIdSchema,
+});
+
 const updateStockPriceSchema = stockSchema.pick({
   currentPrice: true,
 });
@@ -51,7 +61,7 @@ const updateStockStatusSchema = stockSchema.pick({
 });
 
 const getStocksQuerySchema = z.object({
-  isActive: z.coerce.boolean(),
+  isActive: z.coerce.boolean().default(true),
   sortBy: z
     .enum(["name", "symbol", "currentPrice", "quantity", "createdAt"])
     .optional()
@@ -79,13 +89,14 @@ export {
   stockSchema,
   createStockRequestSchema,
   getStocksQuerySchema,
-  GetStocksQuery,
   updateStockPriceSchema,
   updateStockQuantitySchema,
   updateStockDescriptionSchema,
   updateStockStatusSchema,
+  IdParamSchema,
   Stock,
   CreateStockRequest,
+  GetStocksQuery,
   StockResponse,
   StockData,
   UpdateStockPrice,

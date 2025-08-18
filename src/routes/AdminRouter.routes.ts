@@ -1,7 +1,7 @@
 import CommonRoutesConfig from "../config/common.routes.config.js";
 import { creatNonSuperAdminRequestSchema } from "../schemas/Admin.schema.js";
 import asyncHandler from "../utils/asyncHandler.util.js";
-import validate from "../middlewares/validation.middleware.js";
+import { validateRequestBody } from "../middlewares/validation.middleware.js";
 import {
   verifyAdminJwt,
   checkSuperAdmin,
@@ -30,14 +30,14 @@ export default class AdminRouter extends CommonRoutesConfig {
       .post(
         verifyAdminJwt,
         checkSuperAdmin,
-        validate(creatNonSuperAdminRequestSchema),
+        validateRequestBody(creatNonSuperAdminRequestSchema),
         asyncHandler(this.adminController.createAdmin)
       );
 
     this.router
       .route("/login")
       .post(
-        validate(authRequestSchema),
+        validateRequestBody(authRequestSchema),
         asyncHandler(this.adminController.loginAdmin)
       );
 

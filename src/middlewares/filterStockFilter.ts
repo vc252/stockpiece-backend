@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import { getApiError } from "../common/HttpResponse.js";
 import { GetStocksQuery } from "../schemas/stockSchema.js";
+import { roles } from "../common/constants.common.js";
+import { logger } from "../utils/logger.js";
 
 export const restrictStocksByRole = (
   req: Request<object, object, object, unknown>,
@@ -12,12 +14,13 @@ export const restrictStocksByRole = (
   const isActiveParam = query.isActive;
 
   switch (role) {
-    case "admin":
+    case roles.ADMIN:
       // Admins can access all stocks - no restrictions
       break;
 
-    case "user":
+    case roles.USER:
       // Check if user is trying to access inactive stocks
+      logger.debug(isActiveParam);
       if (isActiveParam === false) {
         throw getApiError("FORBIDDEN");
       }

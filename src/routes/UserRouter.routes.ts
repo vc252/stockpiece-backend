@@ -4,13 +4,17 @@ import {
   createUserRequestSchema,
 } from "../schemas/User.schema.js";
 import asyncHandler from "../utils/asyncHandler.util.js";
-import validate from "../middlewares/validation.middleware.js";
+import {
+  validateRequestBody,
+  validateRequestQueryParams,
+} from "../middlewares/validation.middleware.js";
 import Container from "../container/Container.js";
 import UserController from "../controllers/UserController.js";
 import { verifyUserJwt } from "../middlewares/auth.middleware.js";
 import { ImageUploader } from "../middlewares/multer.middleware.js";
 import { restrictStocksByRole } from "../middlewares/filterStockFilter.js";
 import StockController from "../controllers/StockController.js";
+import { getStocksQuerySchema } from "../schemas/stockSchema.js";
 
 export default class UserRouter extends CommonRoutesConfig {
   private readonly userController: UserController;
@@ -27,14 +31,14 @@ export default class UserRouter extends CommonRoutesConfig {
     this.router
       .route("/")
       .post(
-        validate(createUserRequestSchema),
+        validateRequestBody(createUserRequestSchema),
         asyncHandler(this.userController.registerUser)
       );
 
     this.router
       .route("/login")
       .post(
-        validate(authRequestSchema),
+        validateRequestBody(authRequestSchema),
         asyncHandler(this.userController.loginUser)
       );
 
@@ -51,6 +55,7 @@ export default class UserRouter extends CommonRoutesConfig {
       .get(
         verifyUserJwt,
         restrictStocksByRole,
+        validateRequestQueryParams(getStocksQuerySchema),
         asyncHandler(this.stockController.getAllStocks)
       );
   }

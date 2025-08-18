@@ -227,7 +227,11 @@ export default class StockService extends BaseService {
     query: GetStocksQuery
   ): Promise<StockResponse[]> => {
     try {
-      const stocks = await this.stockRepository.getAllStocks(query);
+      const stocks = await this.stockRepository.getAllStocks(
+        query.isActive,
+        query.sortBy,
+        query.sortOrder
+      );
 
       return stocks.map((stock) => ({
         ...stock,

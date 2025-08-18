@@ -2,9 +2,13 @@ import CommonRoutesConfig from "../config/common.routes.config.js";
 import Container from "../container/Container.js";
 import StockController from "../controllers/StockController.js";
 import { ImageUploader } from "../middlewares/multer.middleware.js";
-import validate from "../middlewares/validation.middleware.js";
+import {
+  validateRequestBody,
+  validateRequestRouteParams,
+} from "../middlewares/validation.middleware.js";
 import {
   createStockRequestSchema,
+  IdParamSchema,
   updateStockDescriptionSchema,
   updateStockPriceSchema,
   updateStockQuantitySchema,
@@ -32,7 +36,7 @@ export class StockRouter extends CommonRoutesConfig {
         verifyAdminJwt,
         checkPermissions([permissions.ADD_STOCK]),
         ImageUploader.single("imageURL"),
-        validate(createStockRequestSchema),
+        validateRequestBody(createStockRequestSchema),
         asyncHandler(this.stockController.createStock)
       );
 
@@ -41,13 +45,15 @@ export class StockRouter extends CommonRoutesConfig {
       .patch(
         verifyAdminJwt,
         checkPermissions([permissions.UPDATE_STOCK]),
+        validateRequestRouteParams(IdParamSchema),
         asyncHandler(this.stockController.toggleStockStatus)
       );
 
     this.router.route("/:id/price").patch(
       verifyAdminJwt,
       checkPermissions([permissions.UPDATE_STOCK]),
-      validate(updateStockPriceSchema),
+      validateRequestBody(updateStockPriceSchema),
+      validateRequestRouteParams(IdParamSchema),
       asyncHandler(this.stockController.updateStockPrice) // Correct method
     );
 
@@ -56,7 +62,8 @@ export class StockRouter extends CommonRoutesConfig {
       .patch(
         verifyAdminJwt,
         checkPermissions([permissions.UPDATE_STOCK]),
-        validate(updateStockQuantitySchema),
+        validateRequestBody(updateStockQuantitySchema),
+        validateRequestRouteParams(IdParamSchema),
         asyncHandler(this.stockController.updateStockQuantity)
       );
 
@@ -65,7 +72,8 @@ export class StockRouter extends CommonRoutesConfig {
       .patch(
         verifyAdminJwt,
         checkPermissions([permissions.UPDATE_STOCK]),
-        validate(updateStockDescriptionSchema),
+        validateRequestBody(updateStockDescriptionSchema),
+        validateRequestRouteParams(IdParamSchema),
         asyncHandler(this.stockController.updateStockDescription)
       );
 
