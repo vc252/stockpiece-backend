@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { z } from "zod";
+import { booleanSchema } from "./common.schema.js";
 
 // Base user schema with all fields
 const userSchema = z.object({
@@ -16,7 +17,7 @@ const userSchema = z.object({
   email: z.string().email(),
   password: z.string().trim(),
   refreshToken: z.string().trim().nullable(),
-  hasUsedReferral: z.coerce.boolean(),
+  hasUsedReferral: booleanSchema,
   lastLogin: z.date().nullable(),
   avatar: z.string().trim().url("Avatar must be a valid URL").nullable(),
   accountValue: z.coerce.number(),

@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { permissions } from "../common/constants.common.js";
 import mongoose from "mongoose";
+import { booleanSchema } from "./common.schema.js";
 
 const permissionSchema = z.enum(
   Object.values(permissions) as [string, ...string[]]
@@ -16,7 +17,7 @@ const adminSchema = z.object({
   email: z.string().email(),
   password: z.string().trim(),
   permissions: z.array(permissionSchema),
-  isSuperAdmin: z.coerce.boolean(),
+  isSuperAdmin: booleanSchema,
   createdAt: z.date(),
   updatedAt: z.date(),
 });

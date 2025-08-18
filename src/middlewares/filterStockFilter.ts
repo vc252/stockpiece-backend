@@ -10,8 +10,10 @@ export const restrictStocksByRole = (
   next: NextFunction
 ): void => {
   const role = req.payload?.role;
-  const query = req.query as GetStocksQuery;
+  const query = req.validatedQuery as GetStocksQuery;
   const isActiveParam = query.isActive;
+
+  logger.debug(`${role} ${isActiveParam}`);
 
   switch (role) {
     case roles.ADMIN:
@@ -19,8 +21,6 @@ export const restrictStocksByRole = (
       break;
 
     case roles.USER:
-      // Check if user is trying to access inactive stocks
-      logger.debug(isActiveParam);
       if (isActiveParam === false) {
         throw getApiError("FORBIDDEN");
       }

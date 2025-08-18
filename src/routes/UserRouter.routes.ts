@@ -54,8 +54,8 @@ export default class UserRouter extends CommonRoutesConfig {
       .route("/getAllStocks")
       .get(
         verifyUserJwt,
-        restrictStocksByRole,
         validateRequestQueryParams(getStocksQuerySchema),
+        restrictStocksByRole,
         asyncHandler(this.stockController.getAllStocks)
       );
   }

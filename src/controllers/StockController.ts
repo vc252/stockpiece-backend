@@ -54,7 +54,7 @@ export default class StockController extends BaseController {
     res: Response<ApiResponse<StockResponse[]>>,
     _: NextFunction
   ): Promise<void> => {
-    const query = req.query as GetStocksQuery;
+    const query = req.validatedQuery as GetStocksQuery;
     const stocks = await this.stockService.getAllStocks(query);
 
     res

@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { z } from "zod";
+import { booleanSchema } from "./common.schema.js";
 
 const symbolSchema = z
   .string()
@@ -16,7 +17,7 @@ const stockSchema = z.object({
   imageURL: z.string().url("Invalid image URL"),
   quantity: z.coerce.number().int().nonnegative("Quantity must be >= 0"),
   description: z.string().max(500).optional(),
-  isActive: z.coerce.boolean(),
+  isActive: booleanSchema,
   createdAt: z.date(),
   updatedAt: z.date(),
 });
@@ -61,7 +62,7 @@ const updateStockStatusSchema = stockSchema.pick({
 });
 
 const getStocksQuerySchema = z.object({
-  isActive: z.coerce.boolean().default(true),
+  isActive: booleanSchema.default(true),
   sortBy: z
     .enum(["name", "symbol", "currentPrice", "quantity", "createdAt"])
     .optional()

@@ -1,7 +1,10 @@
 import CommonRoutesConfig from "../config/common.routes.config.js";
 import { creatNonSuperAdminRequestSchema } from "../schemas/Admin.schema.js";
 import asyncHandler from "../utils/asyncHandler.util.js";
-import { validateRequestBody } from "../middlewares/validation.middleware.js";
+import {
+  validateRequestBody,
+  validateRequestQueryParams,
+} from "../middlewares/validation.middleware.js";
 import {
   verifyAdminJwt,
   checkSuperAdmin,
@@ -11,6 +14,7 @@ import AdminController from "../controllers/AdminController.js";
 import { authRequestSchema } from "../schemas/User.schema.js";
 import { restrictStocksByRole } from "../middlewares/filterStockFilter.js";
 import StockController from "../controllers/StockController.js";
+import { getStocksQuerySchema } from "../schemas/stockSchema.js";
 
 export default class AdminRouter extends CommonRoutesConfig {
   private readonly adminController: AdminController;
@@ -45,6 +49,7 @@ export default class AdminRouter extends CommonRoutesConfig {
       .route("/getAllStocks")
       .get(
         verifyAdminJwt,
+        validateRequestQueryParams(getStocksQuerySchema),
         restrictStocksByRole,
         asyncHandler(this.stockController.getAllStocks)
       );
