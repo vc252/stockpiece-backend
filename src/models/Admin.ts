@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import { Admin } from "../schemas/Admin.schema.js";
-import { permissions } from "../common/constants.common.js";
+import { Admin } from "../types/adminTypes.js";
+import { permissions } from "../common/constants.js";
 import * as argon from "argon2";
 
 const adminSchema = new mongoose.Schema<Admin>(

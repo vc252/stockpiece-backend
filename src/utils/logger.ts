@@ -1,7 +1,7 @@
 import winston from "winston";
 import { MongoDBConnectionOptions, MongoDB } from "winston-mongodb";
 import mongoose from "mongoose";
-import { collections } from "../common/constants.common.js";
+import { collections } from "../common/constants.js";
 
 declare module "winston" {
   interface Logger {

@@ -1,14 +1,14 @@
-import CommonRoutesConfig from "../config/common.routes.config.js";
+import BaseRouter from "./BaseRouter.js";
 import { creatNonSuperAdminRequestSchema } from "../schemas/Admin.schema.js";
-import asyncHandler from "../utils/asyncHandler.util.js";
+import asyncHandler from "../utils/asyncHandler.js";
 import {
   validateRequestBody,
   validateRequestQueryParams,
-} from "../middlewares/validation.middleware.js";
+} from "../middlewares/validationMiddleware.js";
 import {
   verifyAdminJwt,
   checkSuperAdmin,
-} from "../middlewares/auth.middleware.js";
+} from "../middlewares/authMiddleware.js";
 import Container from "../container/Container.js";
 import AdminController from "../controllers/AdminController.js";
 import { authRequestSchema } from "../schemas/User.schema.js";
@@ -16,7 +16,7 @@ import { restrictStocksByRole } from "../middlewares/filterStockFilter.js";
 import StockController from "../controllers/StockController.js";
 import { getStocksQuerySchema } from "../schemas/stockSchema.js";
 
-export default class AdminRouter extends CommonRoutesConfig {
+export default class AdminRouter extends BaseRouter {
   private readonly adminController: AdminController;
   private readonly stockController: StockController;
 

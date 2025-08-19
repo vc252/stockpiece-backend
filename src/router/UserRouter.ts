@@ -1,22 +1,22 @@
-import CommonRoutesConfig from "../config/common.routes.config.js";
+import BaseRouter from "./BaseRouter.js";
 import {
   authRequestSchema,
   createUserRequestSchema,
 } from "../schemas/User.schema.js";
-import asyncHandler from "../utils/asyncHandler.util.js";
+import asyncHandler from "../utils/asyncHandler.js";
 import {
   validateRequestBody,
   validateRequestQueryParams,
-} from "../middlewares/validation.middleware.js";
+} from "../middlewares/validationMiddleware.js";
 import Container from "../container/Container.js";
 import UserController from "../controllers/UserController.js";
-import { verifyUserJwt } from "../middlewares/auth.middleware.js";
-import { ImageUploader } from "../middlewares/multer.middleware.js";
+import { verifyUserJwt } from "../middlewares/authMiddleware.js";
+import { ImageUploader } from "../middlewares/multerMiddleware.js";
 import { restrictStocksByRole } from "../middlewares/filterStockFilter.js";
 import StockController from "../controllers/StockController.js";
 import { getStocksQuerySchema } from "../schemas/stockSchema.js";
 
-export default class UserRouter extends CommonRoutesConfig {
+export default class UserRouter extends BaseRouter {
   private readonly userController: UserController;
   private readonly stockController: StockController;
 

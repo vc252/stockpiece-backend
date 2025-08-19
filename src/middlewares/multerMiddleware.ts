@@ -4,7 +4,7 @@ import {
   ALLOWED_MIME_TYPES,
   MAX_FILE_SIZE,
   UPLOAD_PATH,
-} from "../common/constants.common.js";
+} from "../common/constants.js";
 import path from "node:path";
 import { Request } from "express";
 import { getApiError } from "../common/HttpResponse.js";

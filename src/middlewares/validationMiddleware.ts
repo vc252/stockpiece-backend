@@ -1,7 +1,7 @@
 import { ZodSchema } from "zod";
 import { Request, Response, NextFunction } from "express";
-import { parseRequestOrThrow } from "../utils/parseOrThrow.util.js";
-import { GetStocksQuery } from "../schemas/stockSchema.js";
+import { parseRequestOrThrow } from "../utils/parseOrThrow.js";
+import { GetStocksQuery } from "../types/stockTypes.js";
 
 const validateRequestBody =
   (schema: ZodSchema<unknown>) =>

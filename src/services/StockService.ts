@@ -6,7 +6,7 @@ import {
   CreateStockRequest,
   GetStocksQuery,
   StockResponse,
-} from "../schemas/stockSchema.js";
+} from "../types/stockTypes.js";
 import { logger } from "../utils/logger.js";
 import { BaseService } from "./BaseService.js";
 import FileUploadService from "./FileUploaderService.js";

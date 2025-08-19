@@ -1,6 +1,6 @@
 import * as http from "http";
 import app from "./app.js";
-import { permissions, rootdir } from "./common/constants.common.js";
+import { permissions, rootdir } from "./common/constants.js";
 import dotenv from "dotenv";
 import connectDB from "./config/db.config.js";
 import { addMongoTransport, logger } from "./utils/logger.js";

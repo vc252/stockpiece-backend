@@ -1,9 +1,9 @@
 import { Router } from "express";
 import express from "express";
 import Container from "../container/Container.js";
-import { ComponentName } from "./ComponentsDef.js";
+import { ComponentName } from "../config/ComponentsDef.js";
 
-export default abstract class CommonRoutesConfig {
+export default abstract class BaseRouter {
   private readonly _router: Router;
 
   constructor(

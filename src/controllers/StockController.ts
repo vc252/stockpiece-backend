@@ -3,6 +3,7 @@ import Container from "../container/Container.js";
 import { BaseController } from "./BaseController.js";
 import StockService from "../services/StockService.js";
 import { ApiResponse } from "../common/ApiResponse.js";
+import { HttpSuccess, getApiError } from "../common/HttpResponse.js";
 import {
   CreateStockRequest,
   GetStocksQuery,
@@ -10,8 +11,7 @@ import {
   UpdateStockDescription,
   UpdateStockPrice,
   UpdateStockQuantity,
-} from "../schemas/stockSchema.js";
-import { HttpSuccess, getApiError } from "../common/HttpResponse.js";
+} from "../types/stockTypes.js";
 
 export default class StockController extends BaseController {
   private readonly stockService: StockService;

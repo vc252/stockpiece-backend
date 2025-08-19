@@ -1,4 +1,4 @@
-import { Controller } from "../common/types.common.js";
+import { Controller } from "../types/commonTypes.js";
 import { Request, Response, NextFunction } from "express";
 
 const asyncHandler =

@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { getApiError } from "../common/HttpResponse.js";
-import { GetStocksQuery } from "../schemas/stockSchema.js";
-import { roles } from "../common/constants.common.js";
+import { GetStocksQuery } from "../types/stockTypes.js";
+import { roles } from "../common/constants.js";
 import { logger } from "../utils/logger.js";
 
 export const restrictStocksByRole = (

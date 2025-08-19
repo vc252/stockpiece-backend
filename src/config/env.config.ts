@@ -1,7 +1,7 @@
 import z from "zod";
 import { logger } from "../utils/logger.js";
 import dotenv from "dotenv";
-import { rootdir } from "../common/constants.common.js";
+import { rootdir } from "../common/constants.js";
 
 switch (process.env.NODE_ENV) {
   case "development":

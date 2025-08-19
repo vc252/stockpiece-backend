@@ -1,4 +1,4 @@
-import { UserJwtPayload, AdminJwtPayload } from "./common/types.common.js";
+import { UserJwtPayload, AdminJwtPayload } from "./types/commonTypes.js";
 
 declare global {
   namespace Express {

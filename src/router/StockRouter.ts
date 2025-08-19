@@ -1,11 +1,11 @@
-import CommonRoutesConfig from "../config/common.routes.config.js";
+import BaseRouter from "./BaseRouter.js";
 import Container from "../container/Container.js";
 import StockController from "../controllers/StockController.js";
-import { ImageUploader } from "../middlewares/multer.middleware.js";
+import { ImageUploader } from "../middlewares/multerMiddleware.js";
 import {
   validateRequestBody,
   validateRequestRouteParams,
-} from "../middlewares/validation.middleware.js";
+} from "../middlewares/validationMiddleware.js";
 import {
   createStockRequestSchema,
   IdParamSchema,
@@ -13,14 +13,14 @@ import {
   updateStockPriceSchema,
   updateStockQuantitySchema,
 } from "../schemas/stockSchema.js";
-import asyncHandler from "../utils/asyncHandler.util.js";
+import asyncHandler from "../utils/asyncHandler.js";
 import {
   checkPermissions,
   verifyAdminJwt,
-} from "../middlewares/auth.middleware.js";
-import { permissions } from "../common/constants.common.js";
+} from "../middlewares/authMiddleware.js";
+import { permissions } from "../common/constants.js";
 
-export class StockRouter extends CommonRoutesConfig {
+export default class StockRouter extends BaseRouter {
   private readonly stockController: StockController;
 
   constructor(name: string, basePath: string, container: Container) {

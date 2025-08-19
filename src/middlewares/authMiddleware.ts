@@ -2,9 +2,9 @@ import { NextFunction, Request, Response } from "express";
 import { getApiError } from "../common/HttpResponse.js";
 import jwt from "jsonwebtoken";
 import env from "../config/env.config.js";
-import { UserJwtPayload, AdminJwtPayload } from "../common/types.common.js";
+import { UserJwtPayload, AdminJwtPayload } from "../types/commonTypes.js";
 import { logger } from "../utils/logger.js";
-import { PermissionType } from "../common/constants.common.js";
+import { PermissionType } from "../common/constants.js";
 
 const verifyUserJwt = async (
   req: Request,

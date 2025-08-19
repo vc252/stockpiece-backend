@@ -1,6 +1,6 @@
-import AdminRouter from "../routes/AdminRouter.routes.js";
-import { StockRouter } from "../routes/StockRouter.js";
-import UserRouter from "../routes/UserRouter.routes.js";
+import AdminRouter from "../router/AdminRouter.js";
+import StockRouter from "../router/StockRouter.js";
+import UserRouter from "../router/UserRouter.js";
 
 export const routesDefs = [
   //this is the top level component and it won't be used

@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
+import { Stock } from "../types/stockTypes.js";
 
-const stockSchema = new mongoose.Schema(
+const stockSchema = new mongoose.Schema<Stock>(
   {
     name: {
       type: String,

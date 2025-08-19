@@ -70,22 +70,6 @@ const getStocksQuerySchema = z.object({
   sortOrder: z.enum(["asc", "desc"]).optional().default("desc"),
 });
 
-type GetStocksQuery = z.infer<typeof getStocksQuerySchema>;
-
-type UpdateStockPrice = z.infer<typeof updateStockPriceSchema>;
-type UpdateStockQuantity = z.infer<typeof updateStockQuantitySchema>;
-type UpdateStockDescription = z.infer<typeof updateStockDescriptionSchema>;
-type UpdateStockStatus = z.infer<typeof updateStockStatusSchema>;
-
-type Stock = z.infer<typeof stockSchema>;
-type CreateStockRequest = z.infer<typeof createStockRequestSchema>;
-type StockResponse = Omit<Stock, "_id"> & {
-  _id: string;
-};
-type StockData = CreateStockRequest & {
-  imageURL: string;
-};
-
 export {
   stockSchema,
   createStockRequestSchema,
@@ -95,13 +79,4 @@ export {
   updateStockDescriptionSchema,
   updateStockStatusSchema,
   IdParamSchema,
-  Stock,
-  CreateStockRequest,
-  GetStocksQuery,
-  StockResponse,
-  StockData,
-  UpdateStockPrice,
-  UpdateStockQuantity,
-  UpdateStockDescription,
-  UpdateStockStatus,
 };

@@ -1,6 +1,7 @@
-import UserModel from "../models/user.model.js";
-import { CreateUserRequest, User, userSchema } from "../schemas/User.schema.js";
-import { parseDbResponseOrThrow } from "../utils/parseOrThrow.util.js";
+import UserModel from "../models/User..js";
+import { CreateUserRequest, User } from "../types/userTypes.js";
+import { userSchema } from "../schemas/User.schema.js";
+import { parseDbResponseOrThrow } from "../utils/parseOrThrow.js";
 
 export default class UserRepository {
   public readonly createUser = async (

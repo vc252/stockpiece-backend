@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import UserRepository from "../repositories/user.repositories.js";
+import UserRepository from "../repositories/userRepository.js";
 import UserService from "../services/User.service.js";
-import CommonRoutesConfig from "../config/common.routes.config.js";
+import BaseRouter from "../router/BaseRouter.js";
 import Container from "../container/Container.js";
 import { JwtPayload } from "jsonwebtoken";
 
@@ -26,7 +26,7 @@ type RouterDefType = {
     name: string,
     basePath: string,
     routerOptions: keyValueObject
-  ) => CommonRoutesConfig;
+  ) => BaseRouter;
   routerOptions: keyValueObject;
 }[];
 

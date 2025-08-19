@@ -1,17 +1,17 @@
-import { roles } from "../common/constants.common.js";
+import { roles } from "../common/constants.js";
 import { getApiError } from "../common/HttpResponse.js";
-import { mapUserToUserResponse } from "../common/mappings.common.js";
-import { UserAuthResponse, UserJwtPayload } from "../common/types.common.js";
+import { mapUserToUserResponse } from "../common/mappings.js";
+import { UserAuthResponse, UserJwtPayload } from "../types/commonTypes.js";
 import env from "../config/env.config.js";
 import Container from "../container/Container.js";
-import UserRepository from "../repositories/user.repositories.js";
+import UserRepository from "../repositories/userRepository.js";
 import {
   CreateUserRequest,
   AuthRequest,
   User,
   UserResponse,
   UpdateAvatarResponse,
-} from "../schemas/User.schema.js";
+} from "../types/userTypes.js";
 import { logger } from "../utils/logger.js";
 import * as argon from "argon2";
 import jwt from "jsonwebtoken";

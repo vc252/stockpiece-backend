@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { User } from "../schemas/User.schema.js";
+import { User } from "../types/userTypes.js";
 import * as argon from "argon2";
 import Container from "../container/Container.js";
 import FileUploadService from "../services/FileUploaderService.js";

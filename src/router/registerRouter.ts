@@ -1,4 +1,4 @@
-import CommonRoutesConfig from "../config/common.routes.config.js";
+import BaseRouter from "./BaseRouter.js";
 import express from "express";
 import { logger } from "../utils/logger.js";
 import Container from "../container/Container.js";
@@ -12,7 +12,7 @@ export default function registerRoutes(
       name: string,
       basePath: string,
       Container: Container
-    ) => CommonRoutesConfig;
+    ) => BaseRouter;
   }[],
   basePrefix: string,
   Container: Container

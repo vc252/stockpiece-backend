@@ -5,11 +5,11 @@ import {
   AuthRequest,
   UserResponse,
   UpdateAvatarResponse,
-} from "../schemas/User.schema.js";
+} from "../types/userTypes.js";
 import UserService from "../services/User.service.js";
 import { ApiResponse } from "../common/ApiResponse.js";
 import { getApiError, HttpSuccess } from "../common/HttpResponse.js";
-import { UserAuthResponse } from "../common/types.common.js";
+import { UserAuthResponse } from "../types/commonTypes.js";
 import { crossSiteSafeCookieOptions } from "../config/cookie.config.js";
 import { BaseController } from "./BaseController.js";
 

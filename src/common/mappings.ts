@@ -1,5 +1,5 @@
-import { Admin, AdminResponse } from "../schemas/Admin.schema.js";
-import { User, UserResponse } from "../schemas/User.schema.js";
+import { Admin, AdminResponse } from "../types/adminTypes.js";
+import { User, UserResponse } from "../types/userTypes.js";
 
 /**
  * Maps a User object to a UserResponse object by:

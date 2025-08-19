@@ -1,7 +1,8 @@
 import { SortOrder } from "mongoose";
-import StockModel from "../models/stockModel.js";
-import { Stock, StockData, stockSchema } from "../schemas/stockSchema.js";
-import { parseDbResponseOrThrow } from "../utils/parseOrThrow.util.js";
+import StockModel from "../models/Stock.js";
+import { Stock, StockData } from "../types/stockTypes.js";
+import { stockSchema } from "../schemas/stockSchema.js";
+import { parseDbResponseOrThrow } from "../utils/parseOrThrow.js";
 
 export default class StockRepository {
   public readonly createStock = async (

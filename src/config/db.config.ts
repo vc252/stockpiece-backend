@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { logger } from "../utils/logger.js";
-import { DB_NAME } from "../common/constants.common.js";
+import { DB_NAME } from "../common/constants.js";
 import env from "./env.config.js";
 
 async function connectDB(): Promise<void> {

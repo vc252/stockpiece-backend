@@ -1,15 +1,15 @@
 import { Request, Response, NextFunction } from "express";
-import { AdminAuthResponse } from "../common/types.common.js";
+import { AdminAuthResponse } from "../types/commonTypes.js";
 import Container from "../container/Container.js";
 import AdminService from "../services/Admin.service.js";
 import { ApiResponse } from "../common/ApiResponse.js";
 import {
   AdminResponse,
   CreateNonSuperAdminRequest,
-} from "../schemas/Admin.schema.js";
+} from "../types/adminTypes.js";
 import { HttpSuccess } from "../common/HttpResponse.js";
 import { crossSiteSafeCookieOptions } from "../config/cookie.config.js";
-import { AuthRequest } from "../schemas/User.schema.js";
+import { AuthRequest } from "../types/userTypes.js";
 import { BaseController } from "./BaseController.js";
 
 export default class AdminController extends BaseController {

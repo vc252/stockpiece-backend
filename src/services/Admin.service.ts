@@ -1,20 +1,20 @@
 import { getApiError } from "../common/HttpResponse.js";
-import { mapAdminToAdminResponse } from "../common/mappings.common.js";
-import { AdminAuthResponse, AdminJwtPayload } from "../common/types.common.js";
+import { mapAdminToAdminResponse } from "../common/mappings.js";
+import { AdminAuthResponse, AdminJwtPayload } from "../types/commonTypes.js";
 import Container from "../container/Container.js";
-import AdminRepository from "../repositories/admin.repositories.js";
+import AdminRepository from "../repositories/AdminRepository.js";
 import {
   Admin,
   AdminResponse,
   CreateNonSuperAdminRequest,
-} from "../schemas/Admin.schema";
-import { AuthRequest } from "../schemas/User.schema.js";
+} from "../types/adminTypes.js";
+import { AuthRequest } from "../types/userTypes.js";
 import { logger } from "../utils/logger.js";
 import * as argon from "argon2";
 import env from "../config/env.config.js";
 import jwt from "jsonwebtoken";
 import { StringValue } from "ms";
-import { roles } from "../common/constants.common.js";
+import { roles } from "../common/constants.js";
 import { BaseService } from "./BaseService.js";
 
 export default class AdminService extends BaseService {

@@ -1,10 +1,10 @@
-import { Constructor } from "../common/types.common.js";
+import { Constructor } from "../types/commonTypes.js";
 import AdminController from "../controllers/AdminController.js";
 import StockController from "../controllers/StockController.js";
 import UserController from "../controllers/UserController.js";
-import AdminRepository from "../repositories/admin.repositories.js";
+import AdminRepository from "../repositories/AdminRepository.js";
 import StockRepository from "../repositories/StockRepository.js";
-import UserRepository from "../repositories/user.repositories.js";
+import UserRepository from "../repositories/userRepository.js";
 import AdminService from "../services/Admin.service.js";
 import FileUploadService from "../services/FileUploaderService.js";
 import ImageProcessingService from "../services/ImageProcessingService.js";

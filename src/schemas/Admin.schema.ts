@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { permissions } from "../common/constants.common.js";
+import { permissions } from "../common/constants.js";
 import mongoose from "mongoose";
 import { booleanSchema } from "./common.schema.js";
 
@@ -39,22 +39,4 @@ const creatNonSuperAdminRequestSchema = adminSchema
       .max(30, "maximum 30 characters allowed"),
   });
 
-type Admin = z.infer<typeof adminSchema>;
-type CreateNonSuperAdminRequest = z.infer<
-  typeof creatNonSuperAdminRequestSchema
->;
-type CreateAdminRequest = CreateNonSuperAdminRequest & {
-  isSuperAdmin?: boolean;
-};
-type AdminResponse = Omit<Admin, "password" | "_id"> & {
-  _id: string;
-};
-
-export {
-  adminSchema,
-  creatNonSuperAdminRequestSchema,
-  Admin,
-  CreateNonSuperAdminRequest,
-  CreateAdminRequest,
-  AdminResponse,
-};
+export { adminSchema, creatNonSuperAdminRequestSchema };

@@ -1,4 +1,4 @@
-import { Constructor } from "../common/types.common.js";
+import { Constructor } from "../types/commonTypes.js";
 import { ComponentName } from "../config/ComponentsDef.js";
 
 export default class Container {
