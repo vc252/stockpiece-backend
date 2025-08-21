@@ -24,29 +24,69 @@ const windowStatusSchema = z.enum(
 //both of them will also give the market value during that window
 //using the participation we can form streaks of trading
 //which can be given as batches to them
-const tradingWindowSchema = z.object({
-  _id: z.instanceof(mongoose.Types.ObjectId),
-  startTime: z.date(),
-  endTime: z.date(),
-  tradingStartTime: z.date().optional(),
-  tradingEndTime: z.date().optional(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
+// ...existing code...
+const tradingWindowSchema = z
+  .object({
+    _id: z.instanceof(mongoose.Types.ObjectId),
+    startTime: z.date(),
+    endTime: z.date(),
+    tradingStartTime: z.date(),
+    tradingEndTime: z.date(),
+    createdAt: z.date(),
+    updatedAt: z.date(),
 
-  context: z.object({
-    type: windowTypeSchema,
-    number: z.number(),
-  }),
-  status: windowStatusSchema,
+    context: z.object({
+      type: windowTypeSchema,
+      number: z.number(),
+    }),
+    status: windowStatusSchema,
 
-  //window metrics
-  totalUsers: z.number().optional(),
-  totalHolders: z.number().optional(), //users who have the stock
-  totalParticipants: z.number().optional(), //users who took part in the trade
-  totalBuyVolume: z.number().optional(),
-  totalSellVolume: z.number().optional(),
-  totalMarketVolume: z.number().optional(),
-});
+    //window metrics
+    totalUsers: z.number().optional(),
+    totalHolders: z.number().optional(), //users who have the stock
+    totalParticipants: z.number().optional(), //users who took part in the trade
+    totalBuyVolume: z.number().optional(),
+    totalSellVolume: z.number().optional(),
+    totalMarketVolume: z.number().optional(),
+  })
+  .superRefine((data, ctx) => {
+    // Check startTime < endTime
+    if (data.startTime >= data.endTime) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Start time must be before end time",
+        path: ["startTime"],
+      });
+    }
+
+    // Check tradingStartTime < tradingEndTime
+    if (data.tradingStartTime >= data.tradingEndTime) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Trading start time must be before trading end time",
+        path: ["tradingStartTime"],
+      });
+    }
+
+    // Check tradingStartTime >= startTime
+    if (data.tradingStartTime < data.startTime) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message:
+          "Trading start time must be after or equal to window start time",
+        path: ["tradingStartTime"],
+      });
+    }
+
+    // Check tradingEndTime <= endTime
+    if (data.tradingEndTime > data.endTime) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Trading end time must be before or equal to window end time",
+        path: ["tradingEndTime"],
+      });
+    }
+  });
 
 type TradingWindow = z.infer<typeof tradingWindowSchema>;
 

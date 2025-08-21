@@ -1,3 +1,5 @@
+import Container from "../container/Container.js";
+import FileUploadService from "../services/FileUploaderService.js";
 import { Admin, AdminResponse } from "../types/AdminTypes.js";
 import { User, UserResponse } from "../types/userTypes.js";
 
@@ -9,6 +11,13 @@ import { User, UserResponse } from "../types/userTypes.js";
 function mapUserToUserResponse(user: User): UserResponse {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { password, ...userFields } = user;
+
+  //provide the default avatar url
+  if (userFields.avatar === "default") {
+    userFields.avatar = Container.getInstance()
+      .resolve<FileUploadService>("FileUploadService")
+      .getDefaultAvatarUrl();
+  }
 
   return {
     ...userFields,

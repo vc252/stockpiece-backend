@@ -16,7 +16,7 @@ const stockSchema = z.object({
   currentPrice: z.coerce.number().positive("Price must be > 0"),
   imageURL: z.string().url("Invalid image URL"),
   quantity: z.coerce.number().int().nonnegative("Quantity must be >= 0"),
-  description: z.string().max(500).optional(),
+  description: z.string().max(500).default("this is a stock"),
   isActive: booleanSchema,
   createdAt: z.date(),
   updatedAt: z.date(),

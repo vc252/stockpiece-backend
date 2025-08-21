@@ -1,8 +1,6 @@
 import mongoose from "mongoose";
 import { UserDocument } from "../types/userTypes.js";
 import * as argon from "argon2";
-import Container from "../container/Container.js";
-import FileUploadService from "../services/FileUploaderService.js";
 
 const userSchema = new mongoose.Schema<UserDocument>(
   {
@@ -34,6 +32,10 @@ const userSchema = new mongoose.Schema<UserDocument>(
         "Please enter a valid email address",
       ],
     },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
     refreshToken: {
       type: String,
       default: null,
@@ -48,12 +50,17 @@ const userSchema = new mongoose.Schema<UserDocument>(
     },
     avatar: {
       type: String,
-      default: () =>
-        Container.getInstance()
-          .resolve<FileUploadService>("FileUploadService")
-          .getDefaultAvatarUrl(),
+      default: "default",
     },
     accountValue: {
+      type: Number,
+      default: 0,
+    },
+    loginStreak: {
+      type: Number,
+      default: 0,
+    },
+    tradinStreak: {
       type: Number,
       default: 0,
     },

@@ -15,12 +15,15 @@ const userSchema = z.object({
       "Only letters, numbers, dot and underscore allowed"
     ),
   email: z.string().email(),
+  isVerified: booleanSchema.default(false),
   password: z.string().trim(),
   refreshToken: z.string().trim().nullable(),
   hasUsedReferral: booleanSchema,
   lastLogin: z.date().nullable(),
   avatar: z.string().trim().url("Avatar must be a valid URL").nullable(),
-  accountValue: z.coerce.number(),
+  accountValue: z.coerce.number().default(0),
+  loginStreak: z.number().default(0),
+  tradinStreak: z.number().default(0),
   createdAt: z.date(),
   updatedAt: z.date(),
 });
