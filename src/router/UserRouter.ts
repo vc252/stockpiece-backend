@@ -2,7 +2,7 @@ import BaseRouter from "./BaseRouter.js";
 import {
   authRequestSchema,
   createUserRequestSchema,
-} from "../schemas/User.schema.js";
+} from "../schemas/UserSchema.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import {
   validateRequestBody,
@@ -14,7 +14,7 @@ import { verifyUserJwt } from "../middlewares/authMiddleware.js";
 import { ImageUploader } from "../middlewares/multerMiddleware.js";
 import { restrictStocksByRole } from "../middlewares/filterStockFilter.js";
 import StockController from "../controllers/StockController.js";
-import { getStocksQuerySchema } from "../schemas/stockSchema.js";
+import { getStocksQuerySchema } from "../schemas/StockSchema.js";
 
 export default class UserRouter extends BaseRouter {
   private readonly userController: UserController;

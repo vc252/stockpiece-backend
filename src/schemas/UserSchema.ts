@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { z } from "zod";
-import { booleanSchema } from "./common.schema.js";
+import { booleanSchema } from "./commonSchema.js";
 
 // Base user schema with all fields
 const userSchema = z.object({

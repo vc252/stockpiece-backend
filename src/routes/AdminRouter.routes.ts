@@ -1,0 +1,57 @@
+import BaseRouter from "./BaseRouter.js";
+import { creatNonSuperAdminRequestSchema } from "../schemas/AdminSchema.js";
+import asyncHandler from "../utils/asyncHandler.js";
+import {
+  validateRequestBody,
+  validateRequestQueryParams,
+} from "../middlewares/validationMiddleware.js";
+import {
+  verifyAdminJwt,
+  checkSuperAdmin,
+} from "../middlewares/authMiddleware.js";
+import Container from "../container/Container.js";
+import AdminController from "../controllers/AdminController.js";
+import { authRequestSchema } from "../schemas/UserSchema.js";
+import { restrictStocksByRole } from "../middlewares/filterStockFilter.js";
+import StockController from "../controllers/StockController.js";
+import { getStocksQuerySchema } from "../schemas/StockSchema.js";
+
+export default class AdminRouter extends BaseRouter {
+  private readonly adminController: AdminController;
+  private readonly stockController: StockController;
+
+  constructor(name: string, basePath: string, container: Container) {
+    super(name, basePath, container);
+
+    this.adminController = this.resolve<AdminController>("AdminController");
+    this.stockController = this.resolve<StockController>("StockController");
+  }
+
+  public configurRoutes(): void {
+    // Create admin route - requires super admin privileges
+    this.router
+      .route("/")
+      .post(
+        verifyAdminJwt,
+        checkSuperAdmin,
+        validateRequestBody(creatNonSuperAdminRequestSchema),
+        asyncHandler(this.adminController.createAdmin)
+      );
+
+    this.router
+      .route("/login")
+      .post(
+        validateRequestBody(authRequestSchema),
+        asyncHandler(this.adminController.loginAdmin)
+      );
+
+    this.router
+      .route("/getAllStocks")
+      .get(
+        verifyAdminJwt,
+        validateRequestQueryParams(getStocksQuerySchema),
+        restrictStocksByRole,
+        asyncHandler(this.stockController.getAllStocks)
+      );
+  }
+}

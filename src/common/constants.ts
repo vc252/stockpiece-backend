@@ -40,8 +40,23 @@ const roles = {
   ADMIN: "ADMIN",
 };
 
+const windowTypes = {
+  CHAPTER: "chapter",
+  BONUS: "bonus",
+  WEEK: "week",
+} as const;
+
+const windowStatus = {
+  OPEN: "open",
+  CLOSED: "closed",
+  SETTLING: "settling",
+  SETTLED: "settled",
+} as const;
+
 type PermissionType = (typeof permissions)[keyof typeof permissions];
 type RoleType = (typeof roles)[keyof typeof roles];
+type WindowType = (typeof windowTypes)[keyof typeof windowTypes];
+type WindowStatusType = (typeof windowStatus)[keyof typeof windowStatus];
 
 export {
   __filename,
@@ -51,6 +66,10 @@ export {
   collections,
   permissions,
   PermissionType,
+  windowTypes,
+  WindowType,
+  windowStatus,
+  WindowStatusType,
   roles,
   RoleType,
   UPLOAD_PATH,

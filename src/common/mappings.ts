@@ -1,4 +1,4 @@
-import { Admin, AdminResponse } from "../types/adminTypes.js";
+import { Admin, AdminResponse } from "../types/AdminTypes.js";
 import { User, UserResponse } from "../types/userTypes.js";
 
 /**

@@ -1,6 +1,6 @@
 import UserModel from "../models/User..js";
 import { CreateUserRequest, User } from "../types/userTypes.js";
-import { userSchema } from "../schemas/User.schema.js";
+import { userSchema } from "../schemas/UserSchema.js";
 import { parseDbResponseOrThrow } from "../utils/parseOrThrow.js";
 
 export default class UserRepository {

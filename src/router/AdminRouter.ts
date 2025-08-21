@@ -1,5 +1,5 @@
 import BaseRouter from "./BaseRouter.js";
-import { creatNonSuperAdminRequestSchema } from "../schemas/Admin.schema.js";
+import { creatNonSuperAdminRequestSchema } from "../schemas/AdminSchema.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import {
   validateRequestBody,
@@ -11,10 +11,10 @@ import {
 } from "../middlewares/authMiddleware.js";
 import Container from "../container/Container.js";
 import AdminController from "../controllers/AdminController.js";
-import { authRequestSchema } from "../schemas/User.schema.js";
+import { authRequestSchema } from "../schemas/UserSchema.js";
 import { restrictStocksByRole } from "../middlewares/filterStockFilter.js";
 import StockController from "../controllers/StockController.js";
-import { getStocksQuerySchema } from "../schemas/stockSchema.js";
+import { getStocksQuerySchema } from "../schemas/StockSchema.js";
 
 export default class AdminRouter extends BaseRouter {
   private readonly adminController: AdminController;

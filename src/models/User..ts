@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
-import { User } from "../types/userTypes.js";
+import { UserDocument } from "../types/userTypes.js";
 import * as argon from "argon2";
 import Container from "../container/Container.js";
 import FileUploadService from "../services/FileUploaderService.js";
 
-const userSchema = new mongoose.Schema<User>(
+const userSchema = new mongoose.Schema<UserDocument>(
   {
     username: {
       type: String,
@@ -76,6 +76,6 @@ userSchema.pre("save", async function (next) {
   }
 });
 
-const UserModel = mongoose.model<User>("User", userSchema);
+const UserModel = mongoose.model<UserDocument>("User", userSchema);
 
 export default UserModel;

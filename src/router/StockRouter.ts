@@ -12,7 +12,7 @@ import {
   updateStockDescriptionSchema,
   updateStockPriceSchema,
   updateStockQuantitySchema,
-} from "../schemas/stockSchema.js";
+} from "../schemas/StockSchema.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import {
   checkPermissions,

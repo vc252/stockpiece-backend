@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
-import { Admin } from "../types/adminTypes.js";
+import { AdminDocument } from "../types/AdminTypes.js";
 import { permissions } from "../common/constants.js";
 import * as argon from "argon2";
 
-const adminSchema = new mongoose.Schema<Admin>(
+const adminSchema = new mongoose.Schema<AdminDocument>(
   {
     username: {
       type: String,
@@ -62,6 +62,6 @@ adminSchema.pre("save", async function (next) {
   }
 });
 
-const adminModel = mongoose.model("Admin", adminSchema);
+const adminModel = mongoose.model<AdminDocument>("Admin", adminSchema);
 
 export default adminModel;

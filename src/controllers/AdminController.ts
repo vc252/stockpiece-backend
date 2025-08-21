@@ -6,7 +6,7 @@ import { ApiResponse } from "../common/ApiResponse.js";
 import {
   AdminResponse,
   CreateNonSuperAdminRequest,
-} from "../types/adminTypes.js";
+} from "../types/AdminTypes.js";
 import { HttpSuccess } from "../common/HttpResponse.js";
 import { crossSiteSafeCookieOptions } from "../config/cookie.config.js";
 import { AuthRequest } from "../types/userTypes.js";

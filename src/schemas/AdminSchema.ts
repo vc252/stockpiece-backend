@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { permissions } from "../common/constants.js";
 import mongoose from "mongoose";
-import { booleanSchema } from "./common.schema.js";
+import { booleanSchema } from "./commonSchema.js";
 
 const permissionSchema = z.enum(
   Object.values(permissions) as [string, ...string[]]

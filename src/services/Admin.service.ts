@@ -7,7 +7,7 @@ import {
   Admin,
   AdminResponse,
   CreateNonSuperAdminRequest,
-} from "../types/adminTypes.js";
+} from "../types/AdminTypes.js";
 import { AuthRequest } from "../types/userTypes.js";
 import { logger } from "../utils/logger.js";
 import * as argon from "argon2";

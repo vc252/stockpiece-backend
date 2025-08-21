@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import adminModel from "../models/Admin.js";
-import { Admin, CreateAdminRequest } from "../types/adminTypes.js";
-import { adminSchema } from "../schemas/Admin.schema.js";
+import { Admin, CreateAdminRequest } from "../types/AdminTypes.js";
+import { adminSchema } from "../schemas/AdminSchema.js";
 import { parseDbResponseOrThrow } from "../utils/parseOrThrow.js";
 
 export default class AdminRepository {

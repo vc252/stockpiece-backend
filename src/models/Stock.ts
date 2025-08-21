@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-import { Stock } from "../types/stockTypes.js";
+import { StockDocument } from "../types/stockTypes.js";
 
-const stockSchema = new mongoose.Schema<Stock>(
+const stockSchema = new mongoose.Schema<StockDocument>(
   {
     name: {
       type: String,
@@ -49,6 +49,6 @@ const stockSchema = new mongoose.Schema<Stock>(
   }
 );
 
-const StockModel = mongoose.model("Stock", stockSchema);
+const StockModel = mongoose.model<StockDocument>("Stock", stockSchema);
 
 export default StockModel;

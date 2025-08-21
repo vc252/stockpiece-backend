@@ -7,7 +7,8 @@ import {
   updateStockQuantitySchema,
   updateStockDescriptionSchema,
   updateStockStatusSchema,
-} from "../schemas/stockSchema.js";
+} from "../schemas/StockSchema.js";
+import mongoose, { Document } from "mongoose";
 
 type GetStocksQuery = z.infer<typeof getStocksQuerySchema>;
 type UpdateStockPrice = z.infer<typeof updateStockPriceSchema>;
@@ -23,6 +24,8 @@ type StockData = CreateStockRequest & {
   imageURL: string;
 };
 
+interface StockDocument extends Stock, Document<mongoose.Types.ObjectId> {}
+
 export {
   Stock,
   CreateStockRequest,
@@ -33,4 +36,5 @@ export {
   UpdateStockQuantity,
   UpdateStockDescription,
   UpdateStockStatus,
+  StockDocument,
 };

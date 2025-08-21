@@ -3,7 +3,8 @@ import {
   userSchema,
   createUserRequestSchema,
   authRequestSchema,
-} from "../schemas/User.schema.js";
+} from "../schemas/UserSchema.js";
+import mongoose, { Document } from "mongoose";
 
 // Type exports
 type User = z.infer<typeof userSchema>;
@@ -17,10 +18,13 @@ type UpdateAvatarResponse = Pick<
   "_id" | "username" | "email" | "avatar" | "updatedAt"
 >;
 
+interface UserDocument extends User, Document<mongoose.Types.ObjectId> {}
+
 export {
   User,
   CreateUserRequest,
   AuthRequest,
   UserResponse,
   UpdateAvatarResponse,
+  UserDocument,
 };
