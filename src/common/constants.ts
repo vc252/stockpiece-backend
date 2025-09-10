@@ -47,10 +47,14 @@ const windowTypes = {
 } as const;
 
 const windowStatus = {
-  OPEN: "open",
-  CLOSED: "closed",
-  SETTLING: "settling",
-  SETTLED: "settled",
+  OPEN: "open", // Window started, but trading hasn't begun
+  TRADING: "trading", // Active trading period
+  TRADE_CLOSED: "trade_closed", // Trading ended, settlement pending
+  PAUSED: "paused", // Trading temporarily suspended
+  SETTLING: "settling", // Settlement calculations in progress
+  SETTLED: "settled", // Settlement complete
+  CLOSED: "closed", // Window completely finished (final state)
+  CANCELLED: "cancelled", // Window was cancelled
 } as const;
 
 type PermissionType = (typeof permissions)[keyof typeof permissions];

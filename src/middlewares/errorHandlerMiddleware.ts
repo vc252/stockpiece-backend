@@ -45,7 +45,7 @@ export const errorHandler = (
   };
 
   if (isDev) {
-    logger.error("Dev Error:", logData);
+    logger.error(logData);
   } else {
     const isServerError = statusCode >= 500;
     const isUnexpected = !(error instanceof ApiError);
@@ -58,7 +58,7 @@ export const errorHandler = (
         stack: isServerError ? error.stack : undefined,
         rawError: undefined,
       };
-      logger[level]("Prod Error:", prodLogData);
+      logger[level](prodLogData);
     }
   }
 
@@ -103,20 +103,32 @@ const handleMongoError = (error: any): ApiError => {
 const handleMulterError = (error: multer.MulterError): ApiError => {
   switch (error.code) {
     case "LIMIT_FILE_SIZE":
-      return getApiError("BAD_REQUEST", "File size exceeds limit");
+      return getApiError("BAD_REQUEST", error, "File size exceeds limit");
     case "LIMIT_FILE_COUNT":
-      return getApiError("BAD_REQUEST", "Maximum number of files exceeded");
+      return getApiError(
+        "BAD_REQUEST",
+        error,
+        "Maximum number of files exceeded"
+      );
     case "LIMIT_UNEXPECTED_FILE":
-      return getApiError("BAD_REQUEST", "Unexpected file field");
+      return getApiError("BAD_REQUEST", error, "Unexpected file field");
     case "LIMIT_PART_COUNT":
-      return getApiError("BAD_REQUEST", "Too many parts in multipart data");
+      return getApiError(
+        "BAD_REQUEST",
+        error,
+        "Too many parts in multipart data"
+      );
     case "LIMIT_FIELD_KEY":
-      return getApiError("BAD_REQUEST", "Field name too long");
+      return getApiError("BAD_REQUEST", error, "Field name too long");
     case "LIMIT_FIELD_VALUE":
-      return getApiError("BAD_REQUEST", "Field value too long");
+      return getApiError("BAD_REQUEST", error, "Field value too long");
     case "LIMIT_FIELD_COUNT":
-      return getApiError("BAD_REQUEST", "Too many fields");
+      return getApiError("BAD_REQUEST", error, "Too many fields");
     default:
-      return getApiError("BAD_REQUEST", `Upload error: ${error.message}`);
+      return getApiError(
+        "BAD_REQUEST",
+        error,
+        `Upload error: ${error.message}`
+      );
   }
 };

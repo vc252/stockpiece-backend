@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
-import { TradingWindowDocument } from "../types/tradingWindowTypes.js";
+import { WindowDocument } from "../types/tradingWindowTypes.js";
 import { windowStatus, windowTypes } from "../common/constants.js";
 
-const tradingWindowSchema = new mongoose.Schema<TradingWindowDocument>({
+const windowSchema = new mongoose.Schema<WindowDocument>({
   startTime: {
     type: Date,
     required: true,
@@ -16,6 +16,14 @@ const tradingWindowSchema = new mongoose.Schema<TradingWindowDocument>({
     required: true,
   },
   tradingEndTime: {
+    type: Date,
+    required: true,
+  },
+  settlementStartTime: {
+    type: Date,
+    required: true,
+  },
+  settlementEndTime: {
     type: Date,
     required: true,
   },
@@ -52,6 +60,6 @@ const tradingWindowSchema = new mongoose.Schema<TradingWindowDocument>({
   },
 });
 
-const TradinWindowModel = mongoose.model("tradingWindow", tradingWindowSchema);
+const WindowModel = mongoose.model("tradingWindow", windowSchema);
 
-export default TradinWindowModel;
+export default WindowModel;
