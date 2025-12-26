@@ -66,6 +66,11 @@ const HttpError = {
     name: "NotFound",
     message: "User not found",
   },
+  INVALID_STATUS_TRANSITION: {
+    statusCode: 400,
+    name: "BadRequest",
+    message: "Invalid window status transition",
+  },
   METHOD_NOT_ALLOWED: {
     statusCode: 405,
     name: "MethodNotAllowed",

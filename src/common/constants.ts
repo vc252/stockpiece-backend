@@ -57,6 +57,26 @@ const windowStatus = {
   CANCELLED: "cancelled", // Window was cancelled
 } as const;
 
+// Valid status transitions
+const validStatusTransitions = {
+  [windowStatus.OPEN]: [windowStatus.TRADING, windowStatus.CANCELLED],
+  [windowStatus.TRADING]: [
+    windowStatus.PAUSED,
+    windowStatus.TRADE_CLOSED,
+    windowStatus.CANCELLED,
+  ],
+  [windowStatus.PAUSED]: [
+    windowStatus.TRADING,
+    windowStatus.TRADE_CLOSED,
+    windowStatus.CANCELLED,
+  ],
+  [windowStatus.TRADE_CLOSED]: [windowStatus.SETTLING, windowStatus.CANCELLED],
+  [windowStatus.SETTLING]: [windowStatus.SETTLED, windowStatus.CANCELLED],
+  [windowStatus.SETTLED]: [windowStatus.CLOSED],
+  [windowStatus.CLOSED]: [], // Terminal state
+  [windowStatus.CANCELLED]: [], // Terminal state
+} as const;
+
 type PermissionType = (typeof permissions)[keyof typeof permissions];
 type RoleType = (typeof roles)[keyof typeof roles];
 type WindowType = (typeof windowTypes)[keyof typeof windowTypes];
@@ -74,6 +94,7 @@ export {
   WindowType,
   windowStatus,
   WindowStatusType,
+  validStatusTransitions,
   roles,
   RoleType,
   UPLOAD_PATH,
